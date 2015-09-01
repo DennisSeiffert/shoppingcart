@@ -22,7 +22,9 @@ namespace ShoppingCart
 		void Normalize ()
 		{
 			var maxValue = this.Values.Max ();
-			this.Values = this.Values.Select (v => v / maxValue).ToArray ();
+			if (maxValue > 0.0) {
+				this.Values = this.Values.Select (v => v / maxValue).ToArray ();	
+			}
 		}
 	}
 }

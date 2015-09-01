@@ -47,13 +47,15 @@
   <ItemGroup>
     <Compile Include="UCIDatasetImportTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NewLineClassifierTests.cs" />
+    <Compile Include="ImageAdapterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShoppingCart\ShoppingCart.csproj">
-      <Project>{559bf4ea-2ff1-4a93-9747-d4b6c1c6a725}</Project>
+      <Project>{559BF4EA-2FF1-4A93-9747-D4B6C1C6A725}</Project>
       <Name>ShoppingCart</Name>
     </ProjectReference>
   </ItemGroup>

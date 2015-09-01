@@ -57,6 +57,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -65,6 +66,8 @@
     <Compile Include="OptDigitClassifier.cs" />
     <Compile Include="ICharacterMatching.cs" />
     <Compile Include="OptDigitDatabaseAdapter.cs" />
+    <Compile Include="NewLineClassifier.cs" />
+    <Compile Include="ImageAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
