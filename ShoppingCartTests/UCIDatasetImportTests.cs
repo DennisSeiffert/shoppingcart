@@ -24,7 +24,7 @@ namespace ShoppingCartTests
 			result.Values [2].ShouldEqual (0.6764, 0.001);
 			result.Values [3].ShouldEqual (1.0);
 
-			result.Digit.ShouldEqual (6);
+			result.Character.ShouldEqual ('6');
 		}
 	}
 }

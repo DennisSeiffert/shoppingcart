@@ -23,7 +23,7 @@ namespace ShoppingCart
 
 			foreach (var testSample in OptDigitDatabaseAdapter.Read(@"../resources/optdigits.tes")) {
 				var digit = (digitClassifier as ICharacterMatching).Recognize (testSample);
-				Console.Out.WriteLine ("expected result: {0}", testSample.Digit);
+				Console.Out.WriteLine ("expected result: {0}", testSample.Character);
 				Console.Out.WriteLine ("actual: {0}", digit);
 			}
 		}

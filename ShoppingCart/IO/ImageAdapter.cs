@@ -41,7 +41,7 @@ namespace ShoppingCart.IO
 			for (int i = 0; i < rgbValues.Length; i += 3) {
 				grayScaleValues.Add (0.333333 * (rgbValues [i] + rgbValues [i + 1] + rgbValues [i + 2]));
 				if (i > 0 && i % stride == 0) {
-					samples.Add (new Sample (grayScaleValues.ToArray ()));
+					samples.Add (new Sample (grayScaleValues.ToArray (), ' '));
 					grayScaleValues.Clear ();
 				}
 			}
