@@ -12,7 +12,7 @@ namespace ShoppingCartTests
 		[Test]
 		public void ShouldImportJpgImageFile ()
 		{
-			var samples = ImageAdapter.Read ("/commondata/Programming/Repositories/voucherOCR/src/opencvocr/CAM00182.jpg");
+			var samples = ImageAdapter.Read ("testImage.jpg");
 
 			samples.Count ().ShouldBeGreaterThan (10);
 		}
