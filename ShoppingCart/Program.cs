@@ -18,7 +18,7 @@ namespace ShoppingCart
 	{
 		public static void Main (string[] args)
 		{	
-			var digitClassifier = new OptDigitClassifier (OptDigitDatabaseAdapter.Read (@"../resources/optdigits.tra"));
+			var digitClassifier = new DigitClassifier (OptDigitDatabaseAdapter.Read (@"../resources/optdigits.tra"));
 			//digitClassifier.Save ("digitRecognition.ann");
 
 			foreach (var testSample in OptDigitDatabaseAdapter.Read(@"../resources/optdigits.tes")) {

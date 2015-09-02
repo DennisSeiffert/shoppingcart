@@ -13,7 +13,7 @@ namespace ShoppingCartTests
 		[Test]
 		public void ShouldImportJpgImageFile ()
 		{
-			var samples = ImageAdapter.Read ("testImage.jpg");
+			var samples = ImageAdapter.Read ("testImage.jpg", false);
 
 			samples.Count ().ShouldBeGreaterThan (10);
 		}

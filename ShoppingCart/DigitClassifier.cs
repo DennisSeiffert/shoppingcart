@@ -7,17 +7,17 @@ using System.Linq;
 
 namespace ShoppingCart
 {
-	public class OptDigitClassifier : ICharacterMatching
+	public class DigitClassifier : ICharacterMatching
 	{
 		private ActivationNetwork network;
 
-		public OptDigitClassifier (IEnumerable<Sample> samples)
+		public DigitClassifier (IEnumerable<Sample> samples)
 		{
 			this.network = this.InitializeNetwork ();
 			this.Train (samples);
 		}
 
-		public OptDigitClassifier (string filename)
+		public DigitClassifier (string filename)
 		{
 			this.network = (ActivationNetwork)ActivationNetwork.Load (filename);
 		}

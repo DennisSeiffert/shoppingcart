@@ -12,11 +12,17 @@ namespace ShoppingCart.IO
 {
 	public class ImageAdapter
 	{
-		public static IEnumerable<Sample> Read (string filename)
+		public static IEnumerable<Sample> Read (string filename, bool binarizeImage = true)
 		{
 			int stride;
-			var binaryImage = BinarizeImage (filename);
-			var rgbValues = ExtractImageRawData (binaryImage, out stride);
+			Bitmap image = null;
+			if (binarizeImage) {
+				image = BinarizeImage (filename);	
+			} else {
+				image = new Bitmap (filename);
+			}
+
+			var rgbValues = ExtractImageRawData (image, out stride);
 			return ConvertToGrayScaleSamples (rgbValues, stride);
 		}
 
