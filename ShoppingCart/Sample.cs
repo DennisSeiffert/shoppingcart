@@ -7,13 +7,20 @@ namespace ShoppingCart
 {
 	public class Sample
 	{
+		double maxValue;
 
-		public Sample (double[] values) : this (values.Take (values.Length - 1).ToArray (), char.Parse (values.Last ().ToString ()))
+		public Sample (double[] values, double maxValue) : this (values.Take (values.Length - 1).ToArray (),
+			                                                        char.Parse (values.Last ().ToString ()), maxValue)
 		{			
 		}
 
-		public Sample (double[] values, char character)
+		public Sample (char character) : this (new double[]{ }, character, 0.0)
 		{
+		}
+
+		public Sample (double[] values, char character, double maxValue)
+		{
+			this.maxValue = maxValue;
 			this.Values = values;
 			this.Normalize ();
 			this.Character = character;
@@ -24,10 +31,9 @@ namespace ShoppingCart
 		public char Character { get; private set; }
 
 		void Normalize ()
-		{
-			var maxValue = this.Values.Max ();
-			if (maxValue > 0.0) {
-				this.Values = this.Values.Select (v => v / maxValue).ToArray ();	
+		{			
+			if (this.maxValue > 0.0) {
+				this.Values = this.Values.Select (v => v / this.maxValue).ToArray ();	
 			}
 		}
 	}

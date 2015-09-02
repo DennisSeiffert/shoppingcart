@@ -11,7 +11,7 @@ namespace ShoppingCartTests
 		[Test]
 		public void ShouldClassifySampleAsNewLine ()
 		{
-			var sample = new Sample (new double[]{ 0.0, 0.0, 0.0, 1.0 });
+			var sample = new Sample (new double[]{ 0.6, 0.5, 0.5, 1.0 }, 1.0);
 			ICharacterMatching sut = new NewLineClassifier ();
 
 			sut.Recognize (sample).ShouldEqual ('\n');
@@ -20,7 +20,7 @@ namespace ShoppingCartTests
 		[Test]
 		public void ShouldMisclassifySampleAsNewLine ()
 		{
-			var sample = new Sample (new double[]{ 0.0, 1.0, 1.0, 1.0 });
+			var sample = new Sample (new double[]{ 0.0, 0.4, 0.2, 1.0 }, 1.0);
 			ICharacterMatching sut = new NewLineClassifier ();
 
 			sut.Recognize (sample).ShouldEqual (' ');

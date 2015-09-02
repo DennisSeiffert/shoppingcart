@@ -12,8 +12,8 @@ namespace ShoppingCart
 		#region ICharacterMatching implementation
 
 		char ICharacterMatching.Recognize (Sample sample)
-		{
-			if (sample.Values.Sum () / sample.Values.Length < 0.05) {
+		{			
+			if (sample.Values.Average () > 0.5) {
 				return '\n';
 			}
 

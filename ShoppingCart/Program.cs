@@ -26,6 +26,9 @@ namespace ShoppingCart
 				Console.Out.WriteLine ("expected result: {0}", testSample.Character);
 				Console.Out.WriteLine ("actual: {0}", digit);
 			}
+
+			var shoppingCartReader = new ShoppingCartReader (digitClassifier, new NewLineClassifier ());
+			shoppingCartReader.Read (args [0]);
 		}
 
 

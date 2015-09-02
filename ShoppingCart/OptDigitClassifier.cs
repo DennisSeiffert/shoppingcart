@@ -35,7 +35,7 @@ namespace ShoppingCart
 			var learning = new BackPropagationLearning (this.network);
 			foreach (var sample in samples) {
 				double[] expectedResult = new double[10];
-				expectedResult [(int)sample.Character] = 1.0;
+				expectedResult [int.Parse (sample.Character.ToString ())] = 1.0;
 				var error = learning.Run (sample.Values, expectedResult);
 				Console.Out.WriteLine ("Error: {0}", error);
 			}

@@ -21,7 +21,7 @@ namespace ShoppingCart.IO
 
 		private static Sample Convert (string line)
 		{
-			return new Sample (line.Split (new []{ ',' }, StringSplitOptions.RemoveEmptyEntries).Select (d => double.Parse (d)).ToArray ());
+			return new Sample (line.Split (new []{ ',' }, StringSplitOptions.RemoveEmptyEntries).Select (d => double.Parse (d)).ToArray (), 16.0);
 		}
 	}
 }
