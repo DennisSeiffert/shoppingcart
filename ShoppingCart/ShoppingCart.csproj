@@ -65,9 +65,9 @@
     <Compile Include="Sample.cs" />
     <Compile Include="OptDigitClassifier.cs" />
     <Compile Include="ICharacterMatching.cs" />
-    <Compile Include="OptDigitDatabaseAdapter.cs" />
     <Compile Include="NewLineClassifier.cs" />
-    <Compile Include="ImageAdapter.cs" />
+    <Compile Include="IO\OptDigitDatabaseAdapter.cs" />
+    <Compile Include="IO\ImageAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -88,4 +88,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="IO\" />
+  </ItemGroup>
 </Project>

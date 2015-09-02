@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Should;
 using NUnit.Framework;
 using ShoppingCart;
+using ShoppingCart.IO;
 
 namespace ShoppingCartTests
 {

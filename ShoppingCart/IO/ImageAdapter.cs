@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using Accord.Math;
 using System.Linq;
 
-namespace ShoppingCart
+namespace ShoppingCart.IO
 {
 	public class ImageAdapter
 	{
@@ -14,7 +14,7 @@ namespace ShoppingCart
 		{
 			int stride;
 			var rgbValues = ExtractImageRawData (filename, out stride);
-			ConvertToGrayScaleSamples (rgbValues, stride);
+			return ConvertToGrayScaleSamples (rgbValues, stride);
 		}
 
 		private static byte[] ExtractImageRawData (string filename, out int stride)
@@ -25,15 +25,16 @@ namespace ShoppingCart
 			try {
 				IntPtr ptr = data.Scan0;
 				int bytes = Math.Abs (data.Stride) * myImage.Height;
+				stride = data.Stride;
 				rgbValues = new byte[bytes];
 				Marshal.Copy (ptr, rgbValues, 0, bytes);
-			} finally {
+			} finally {				
 				myImage.UnlockBits (data);
 			}
 			return rgbValues;
 		}
 
-		private static void ConvertToGrayScaleSamples (byte[] rgbValues, int stride)
+		private static IEnumerable<Sample> ConvertToGrayScaleSamples (byte[] rgbValues, int stride)
 		{
 			var samples = new List<Sample> ();
 			var grayScaleValues = new List<double> ();

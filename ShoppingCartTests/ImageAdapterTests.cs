@@ -3,6 +3,7 @@ using NUnit.Framework;
 using ShoppingCart;
 using System.Linq;
 using Should;
+using ShoppingCart.IO;
 
 namespace ShoppingCartTests
 {
