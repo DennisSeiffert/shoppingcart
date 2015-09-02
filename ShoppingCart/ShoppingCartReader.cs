@@ -24,7 +24,9 @@ namespace ShoppingCart
 
 		public string Read (IEnumerable<Sample> imageDataPerLine)
 		{
-			var imageDataPerLineWithCarriageReturns = ExtractCarriageReturns (imageDataPerLine).ToList ();
+			var imageDataPerLineWithCarriageReturns = ExtractCarriageReturns (imageDataPerLine);
+			var imageDataWithoutDuplicateCarriageReturns = imageDataPerLineWithCarriageReturns.SkipWhile ((s, i) => s.Character == '\n' && i > 0
+			                                               && imageDataPerLineWithCarriageReturns.ElementAt (i - 1).Character == '\n');
 
 			return string.Empty;
 		}
