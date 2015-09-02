@@ -58,6 +58,16 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Drawing" />
+    <Reference Include="Accord.Imaging">
+      <HintPath>..\packages\Accord.Imaging.3.0.2\lib\net45\Accord.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Video">
+      <HintPath>..\packages\Accord.Video.3.0.2\lib\net45\Accord.Video.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Controls.Imaging">
+      <HintPath>..\packages\Accord.Controls.Imaging.3.0.2\lib\net45\Accord.Controls.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -69,6 +79,8 @@
     <Compile Include="IO\OptDigitDatabaseAdapter.cs" />
     <Compile Include="IO\ImageAdapter.cs" />
     <Compile Include="ShoppingCartReader.cs" />
+    <Compile Include="CarriageReturn.cs" />
+    <Compile Include="BlankLine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

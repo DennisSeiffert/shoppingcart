@@ -5,6 +5,8 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Accord.Math;
 using System.Linq;
+using Accord.Imaging.Filters;
+using Accord.Controls;
 
 namespace ShoppingCart.IO
 {
@@ -13,25 +15,36 @@ namespace ShoppingCart.IO
 		public static IEnumerable<Sample> Read (string filename)
 		{
 			int stride;
-			var rgbValues = ExtractImageRawData (filename, out stride);
+			var binaryImage = BinarizeImage (filename);
+			var rgbValues = ExtractImageRawData (binaryImage, out stride);
 			return ConvertToGrayScaleSamples (rgbValues, stride);
 		}
 
-		private static byte[] ExtractImageRawData (string filename, out int stride)
-		{
-			Bitmap myImage = new Bitmap (filename);
+		private static byte[] ExtractImageRawData (Bitmap binaryImage, out int stride)
+		{			
+			// Show on the screen
+			// ImageBox.Show (result);
+
 			byte[] rgbValues = null;
-			BitmapData data = myImage.LockBits (new Rectangle (0, 0, myImage.Width, myImage.Height), ImageLockMode.ReadOnly, myImage.PixelFormat);
+			BitmapData data = binaryImage.LockBits (new Rectangle (0, 0, binaryImage.Width, binaryImage.Height), ImageLockMode.ReadOnly, binaryImage.PixelFormat);
 			try {
 				IntPtr ptr = data.Scan0;
-				int bytes = Math.Abs (data.Stride) * myImage.Height;
+				int bytes = Math.Abs (data.Stride) * binaryImage.Height;
 				stride = data.Stride;
 				rgbValues = new byte[bytes];
 				Marshal.Copy (ptr, rgbValues, 0, bytes);
 			} finally {				
-				myImage.UnlockBits (data);
+				binaryImage.UnlockBits (data);
 			}
 			return rgbValues;
+		}
+
+		private static Bitmap BinarizeImage (string filename)
+		{
+			Bitmap myImage = new Bitmap (filename);
+			var niblack = new SauvolaThreshold ();
+			Bitmap result = niblack.Apply (myImage);
+			return result;
 		}
 
 		private static IEnumerable<Sample> ConvertToGrayScaleSamples (byte[] rgbValues, int stride)
