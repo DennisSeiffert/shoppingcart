@@ -14,6 +14,11 @@ namespace ShoppingCart
 
 		char ICharacterMatching.Recognize (Sample sample)
 		{				
+			return this.OnRecognize (sample);
+		}
+
+		protected virtual char OnRecognize (Sample sample)
+		{
 			var deviation = sample.Values.StandardDeviation (false);
 			if (deviation < 0.1) {
 				return '\n';

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using Accord.Math;
+using System.Threading.Tasks;
 
 namespace ShoppingCart
 {
@@ -11,7 +12,7 @@ namespace ShoppingCart
 	{
 		private ICharacterMatching digitClassifier;
 
-		private ICharacterMatching newLineClassifier;
+		private LineSegmentation lineSegmentation;
 
 		private ICharacterMatching blankLineClassifier;
 
@@ -19,7 +20,7 @@ namespace ShoppingCart
 		                           ICharacterMatching blankLineClassifier)
 		{
 			this.blankLineClassifier = blankLineClassifier;
-			this.newLineClassifier = newLineClassifier;
+			this.lineSegmentation = new LineSegmentation (newLineClassifier);
 			this.digitClassifier = digitClassifier;
 		}
 
@@ -30,21 +31,41 @@ namespace ShoppingCart
 
 		public string Read (IEnumerable<Sample> imageRows)
 		{			
-			var lines = SegmentIntoLines (imageRows).ToList ();
+			var lines = this.lineSegmentation.Segment (imageRows).ToList ();
 
 			foreach (var line in lines) {
 				int leftBorder = 0;
 				int rightBorder = 0;
+				double[,] matrix = Matrix.Create (line.Count, 1, 0.0);
 				for (int i = 0; i < line.First ().Values.Length; i++) {
 					var verticalLine = line.Select (s => s.Values [i]).ToArray ();
+					matrix.InsertColumn (verticalLine);
 					var character = this.blankLineClassifier.Recognize (new Sample (verticalLine, 1.0));
-					if (character == '\n') {
+					if (character == '|') {
 						rightBorder = i;
-						var characterSegment = line.SelectMany (s => s.Values.Skip (leftBorder).Take (rightBorder - leftBorder));
+						int height = line.Count, width = rightBorder - leftBorder;
+						int segmentationWindowWidth = (int)Math.Ceiling (width / 8.0), segmentationWindowHeight = (int)Math.Ceiling (height / 8.0);
 
+						double[] characterIntensityDistribution = new double[64];
+						int quadrant = 0;
+						double maxValue = 0;
+						for (int stepY = 0; stepY < width; stepY += segmentationWindowHeight) {							
+							for (int stepX = 0; stepX < width; stepX += segmentationWindowWidth) {
+								var activatedPixels = 0.0;
+								var subMatrix = matrix.Submatrix (stepY, stepY + segmentationWindowHeight, stepX, stepX + segmentationWindowWidth);
+								subMatrix.Apply (e => activatedPixels += e);
+								characterIntensityDistribution [quadrant] = activatedPixels;
+								maxValue = Math.Max (maxValue, activatedPixels);
 
-						this.digitClassifier.Recognize (new Sample (characterSegment.ToArray (), 1.0));
+								quadrant++;
+							}	
+						}
 
+						matrix = Matrix.Create (line.Count, 1, 0.0);
+
+						char digit = this.digitClassifier.Recognize (new Sample (characterIntensityDistribution, maxValue));
+
+						Console.Out.Write (digit);
 
 						leftBorder = i;
 					}
@@ -55,52 +76,7 @@ namespace ShoppingCart
 			return string.Empty;
 		}
 
-		private IEnumerable<List<Sample>> SegmentIntoLines (IEnumerable<Sample> imageRows)
-		{
-			var imageDataPerLineWithCarriageReturns = InsertCarriageReturnMarker (imageRows);
-//			var imageDataWithoutDuplicateCarriageReturns = imageDataPerLineWithCarriageReturns.SkipWhile ((s, i) => s.Character == '\n' && i > 0
-//			                                               && imageDataPerLineWithCarriageReturns.ElementAt (i - 1).Character == '\n');
 
-//			var width = 100;
-//			var bitmap = new Bitmap (width, imageDataPerLineWithCarriageReturns.Count ());
-//			using (var g = Graphics.FromImage (bitmap)) {
-//				for (int i = 0; i < imageDataPerLineWithCarriageReturns.Count (); i++) {
-//					if (imageDataPerLineWithCarriageReturns.ElementAt (i) is CarriageReturn) {
-//						g.DrawLine (new Pen (new SolidBrush (Color.Red)), 0, i, width, i);
-//					}
-//				}
-//				g.Flush (System.Drawing.Drawing2D.FlushIntention.Sync);
-//			}
-//			bitmap.Save ("linesegmentation.jpg");
-
-			var line = new List<Sample> ();
-			bool isInline = true;
-			foreach (var row in imageDataPerLineWithCarriageReturns) {
-				if (row is CarriageReturn && !isInline) {
-					line = new List<Sample> ();
-					isInline = true;
-					continue;
-				}
-				if (!(row is CarriageReturn) && isInline) {
-					line.Add (row);
-				}
-				if (row is CarriageReturn && isInline && line.Any ()) {
-					yield return line;
-					isInline = false;
-				}
-			}
-		}
-
-		private IEnumerable<Sample> InsertCarriageReturnMarker (IEnumerable<Sample> imageDataPerLine)
-		{			
-			foreach (var line in imageDataPerLine) {								
-				if (this.newLineClassifier.Recognize (line) == '\n') {					
-					yield return new CarriageReturn ();
-					continue;
-				}
-				yield return line;					
-			}
-		}
 	}
 }
 

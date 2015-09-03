@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Accord.Math;
 
 namespace ShoppingCart
 {
@@ -35,6 +36,35 @@ namespace ShoppingCart
 			if (this.maxValue > 0.0) {
 				this.Values = this.Values.Select (v => v / this.maxValue).ToArray ();	
 			}
+		}
+
+		/// <summary>
+		/// returns a intensity distribution of dynamically sized quadrants from the matrix. 
+		/// Nevertheless the resulting sample has a fixed length of 64 elements.
+		/// This representation is slightly invariant to minimal translation and scaling.
+		/// </summary>
+		/// <returns>The intensity distribution.</returns>
+		/// <param name="matrix">Matrix.</param>
+		public static Sample FromIntensityDistribution (double[,] matrix)
+		{
+			double[] characterIntensityDistribution = new double[64];
+			int quadrant = 0;
+			double maxValue = 0;
+			int width = matrix.Columns;
+			int height = matrix.Rows;
+			int segmentationWindowWidth = (int)Math.Ceiling (width / 8.0), segmentationWindowHeight = (int)Math.Ceiling (height / 8.0);
+
+			for (int stepY = 0; stepY < height; stepY += segmentationWindowHeight) {
+				for (int stepX = 0; stepX < width; stepX += segmentationWindowWidth) {
+					var activatedPixels = 0.0;
+					var subMatrix = matrix.Submatrix (stepY, stepY + segmentationWindowHeight, stepX, stepX + segmentationWindowWidth);
+					subMatrix.Apply (e => activatedPixels += e);
+					characterIntensityDistribution [quadrant] = activatedPixels;
+					maxValue = Math.Max (maxValue, activatedPixels);
+					quadrant++;
+				}
+			}
+			return matrix;
 		}
 	}
 }
