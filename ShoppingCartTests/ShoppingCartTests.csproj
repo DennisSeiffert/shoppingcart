@@ -49,6 +49,9 @@
     <Reference Include="Accord.Math">
       <HintPath>..\packages\Accord.Math.3.0.2\lib\net45\Accord.Math.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UCIDatasetImportTests.cs" />
@@ -56,6 +59,7 @@
     <Compile Include="NewLineClassifierTests.cs" />
     <Compile Include="ImageAdapterTests.cs" />
     <Compile Include="SampleTests.cs" />
+    <Compile Include="BlockSegmentationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
