@@ -81,6 +81,7 @@
     <Compile Include="CarriageReturn.cs" />
     <Compile Include="BlankLine.cs" />
     <Compile Include="DigitClassifier.cs" />
+    <Compile Include="BlankLineClassifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

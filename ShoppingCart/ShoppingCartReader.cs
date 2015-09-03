@@ -3,6 +3,7 @@ using ShoppingCart.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using Accord.Math;
 
 namespace ShoppingCart
 {
@@ -12,8 +13,12 @@ namespace ShoppingCart
 
 		private ICharacterMatching newLineClassifier;
 
-		public ShoppingCartReader (ICharacterMatching digitClassifier, ICharacterMatching newLineClassifier)
+		private ICharacterMatching blankLineClassifier;
+
+		public ShoppingCartReader (ICharacterMatching digitClassifier, ICharacterMatching newLineClassifier, 
+		                           ICharacterMatching blankLineClassifier)
 		{
+			this.blankLineClassifier = blankLineClassifier;
 			this.newLineClassifier = newLineClassifier;
 			this.digitClassifier = digitClassifier;
 		}
@@ -26,6 +31,26 @@ namespace ShoppingCart
 		public string Read (IEnumerable<Sample> imageRows)
 		{			
 			var lines = SegmentIntoLines (imageRows).ToList ();
+
+			foreach (var line in lines) {
+				int leftBorder = 0;
+				int rightBorder = 0;
+				for (int i = 0; i < line.First ().Values.Length; i++) {
+					var verticalLine = line.Select (s => s.Values [i]).ToArray ();
+					var character = this.blankLineClassifier.Recognize (new Sample (verticalLine, 1.0));
+					if (character == '\n') {
+						rightBorder = i;
+						var characterSegment = line.SelectMany (s => s.Values.Skip (leftBorder).Take (rightBorder - leftBorder));
+
+
+						this.digitClassifier.Recognize (new Sample (characterSegment.ToArray (), 1.0));
+
+
+						leftBorder = i;
+					}
+				}
+
+			}
 
 			return string.Empty;
 		}
