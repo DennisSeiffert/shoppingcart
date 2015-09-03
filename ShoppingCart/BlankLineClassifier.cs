@@ -1,12 +1,23 @@
 ﻿using System;
+using System.Linq;
 
 namespace ShoppingCart
 {
-	public class BlankLineClassifier : NewLineClassifier
+	public class BlankLineClassifier : ICharacterMatching
 	{
-		protected override char OnRecognize (Sample sample)
+		#region ICharacterMatching implementation
+
+		char ICharacterMatching.Recognize (Sample sample)
 		{
-			if (base.OnRecognize (sample) == '\n') {
+			return this.OnRecognize (sample);
+		}
+
+		#endregion
+
+		private char OnRecognize (Sample sample)
+		{
+			var sum = sample.Values.Sum ();
+			if (sum / sample.Values.Length > 0.9) {
 				return '|';
 			}
 			return ' ';
