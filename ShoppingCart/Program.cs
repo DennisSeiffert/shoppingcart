@@ -28,7 +28,7 @@ namespace ShoppingCart
 			}
 
 			var shoppingCartReader = new ShoppingCartReader (digitClassifier, new NewLineClassifier (), new BlankLineClassifier ());
-			shoppingCartReader.Read (args [0]);
+			Console.Out.WriteLine (shoppingCartReader.Read (args [0]));
 		}
 
 

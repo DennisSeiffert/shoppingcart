@@ -38,7 +38,7 @@ namespace ShoppingCart
 			foreach (var line in lines) {
 				foreach (var block in this.blockSegmentation.Segment (line)) {
 					char digit = this.digitClassifier.Recognize (block);
-					readShoppingCart.Append (digit);
+					readShoppingCart.Append (digit.ToString ());
 				} 					
 				readShoppingCart.AppendLine ();
 			}
