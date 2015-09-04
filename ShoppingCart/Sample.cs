@@ -55,9 +55,9 @@ namespace ShoppingCart
 			int segmentationWindowWidth = (int)Math.Ceiling (width / 8.0), segmentationWindowHeight = (int)Math.Ceiling (height / 8.0);
 
 			while ((width = matrix.Columns ()) < segmentationWindowWidth * 8.0)
-				matrix = matrix.InsertColumn (new double[height]);			
+				matrix = matrix.InsertColumn (Matrix.Vector (height, 1.0));			
 			while ((height = matrix.Rows ()) < segmentationWindowHeight * 8.0)
-				matrix = matrix.InsertRow (new double[width]);
+				matrix = matrix.InsertRow (Matrix.Vector (width, 1.0));
 
 			for (int stepY = 0; stepY < height; stepY += segmentationWindowHeight) {
 				for (int stepX = 0; stepX < width; stepX += segmentationWindowWidth) {
@@ -65,7 +65,7 @@ namespace ShoppingCart
 					var subMatrix = matrix.Submatrix (
 						                stepY, stepY + segmentationWindowHeight - 1, 
 						                stepX, stepX + segmentationWindowWidth - 1);
-					subMatrix.Apply (e => activatedPixels += e);
+					subMatrix.Apply (e => activatedPixels += 1.0 - e);
 					characterIntensityDistribution [quadrant] = activatedPixels;
 					maxValue = Math.Max (maxValue, activatedPixels);
 					quadrant++;

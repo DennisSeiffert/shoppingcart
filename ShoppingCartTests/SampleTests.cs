@@ -23,7 +23,7 @@ namespace ShoppingCartTests
 			result.Values.Length.ShouldEqual (64);
 			int shift = 0;
 			for (int i = 0; i < result.Values.Length; i += 8) {
-				result.Values [i + shift].ShouldEqual (shift < 7 ? 1.0 : 0.5);	
+				result.Values [i + shift].ShouldEqual (shift < 7 ? 0.5 : 0.0);	
 				shift++;
 			}
 		}

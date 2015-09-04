@@ -19,8 +19,8 @@ namespace ShoppingCartTests
 		public void ShouldCreateBlocksFromLine ()
 		{
 			var line = new List<Sample> ();
-			line.Add (new Sample (new double[]{ 1.0, 0.0, 1.0 }, ' ', 1.0));
-			line.Add (new Sample (new double[]{ 1.0, 0.0, 1.0 }, ' ', 1.0));
+			line.Add (new Sample (new double[]{ 0.0, 1.0, 0.0 }, ' ', 1.0));
+			line.Add (new Sample (new double[]{ 0.0, 1.0, 0.0 }, ' ', 1.0));
 
 			var result = this.CreateBlocksFromLine (line);
 
@@ -36,8 +36,8 @@ namespace ShoppingCartTests
 		{
 			var line = new List<Sample> ();
 			line.Add (new CarriageReturn (0));
-			line.Add (new Sample (new double[]{ 1.0, 0.0, 1.0 }, ' ', 1.0));
-			line.Add (new Sample (new double[]{ 1.0, 0.0, 1.0 }, ' ', 1.0));
+			line.Add (new Sample (new double[]{ 0.0, 1.0, 0.0 }, ' ', 1.0));
+			line.Add (new Sample (new double[]{ 0.0, 1.0, 0.0 }, ' ', 1.0));
 			line.Add (new CarriageReturn (3));
 
 			var result = CreateBlocksFromLine (line);
@@ -49,12 +49,25 @@ namespace ShoppingCartTests
 			result.Last ().Values.Sum ().ShouldEqual (2.0);
 		}
 
+		[Test]
+		public void ShouldCreateEmptyBlockWhenLineContainsCarriageReturnsOnly ()
+		{
+			var line = new List<Sample> ();
+			line.Add (new CarriageReturn (0));
+			line.Add (new CarriageReturn (1));
+
+			var result = CreateBlocksFromLine (line);
+
+			result.Count ().ShouldEqual (1);
+			result.First ().Values.Sum ().ShouldEqual (0.0);
+		}
+
 		private IEnumerable<Sample> CreateBlocksFromLine (List<Sample> line)
 		{
 			var blanklineMatching = Substitute.For<ICharacterMatching> ();
 			blanklineMatching.Recognize (Arg.Any<Sample> ()).Returns ((NSubstitute.Core.CallInfo arg) => {
 				var sample = arg.Arg<Sample> ();
-				if (sample.Values.Sum () == 0)
+				if (sample.Values.Sum () == sample.Values.Length)
 					return '|';
 				return ' ';
 			});
