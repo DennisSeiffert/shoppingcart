@@ -13,7 +13,7 @@ namespace ShoppingCart
 {
 	public class ShoppingCartReader
 	{
-		private ICharacterMatching digitClassifier;
+		private ICharacterMatching characterClassifier;
 
 		private LineSegmentation lineSegmentation;
 
@@ -21,12 +21,12 @@ namespace ShoppingCart
 
 		private Bitmap image;
 
-		public ShoppingCartReader (ICharacterMatching digitClassifier, ICharacterMatching newLineClassifier, 
+		public ShoppingCartReader (ICharacterMatching characterClassifier, ICharacterMatching newLineClassifier, 
 		                           ICharacterMatching blankLineClassifier)
 		{
 			this.lineSegmentation = new LineSegmentation (newLineClassifier);
 			this.blockSegmentation = new BlockSegmentation (blankLineClassifier);
-			this.digitClassifier = digitClassifier;
+			this.characterClassifier = characterClassifier;
 		}
 
 		public string Read (string shoppingCartImageFilename)
@@ -38,38 +38,28 @@ namespace ShoppingCart
 		public string Read (IEnumerable<Sample> imageRows)
 		{			
 			var lines = this.lineSegmentation.Segment (imageRows).ToList ();
-			var readShoppingCart = new StringBuilder ();
 			var blockRectangles = new List<Rectangle> ();
 
 			foreach (var line in lines) {				
-				int blockLeftBorder = 0, blockRightBorder = 0;
-				var blockTopBorder = (line.First (l => l is CarriageReturn) as CarriageReturn).Row;
-				var blockBottomBorder = (line.Last (l => l is CarriageReturn) as CarriageReturn).Row;
-				foreach (var block in this.blockSegmentation.Segment (line)) {					
-					if (block is BlankLine) {
-						blockLeftBorder = blockRightBorder;
-						blockRightBorder = (block as BlankLine).Column;
-						continue;
+				foreach (var block in this.blockSegmentation.Segment (line).Cast<CharacterBlock>()) {						
+					if (block.Width * block.Height > 0) {
+						blockRectangles.Add (new Rectangle (block.Column, block.Row, block.Width, block.Height));	
 					}
-
-					int width = blockRightBorder - blockLeftBorder, height = blockBottomBorder - blockTopBorder;
-					if (width * height > 0) {
-						blockRectangles.Add (new Rectangle (blockLeftBorder, blockTopBorder, width, height));	
-					}
-
-					char digit = this.digitClassifier.Detect (block);
-					readShoppingCart.Append (digit.ToString ());
 				} 					
-				readShoppingCart.AppendLine ();
 			}				
 
 			using (var g = Graphics.FromImage (this.image)) {
 				foreach (var rect in blockRectangles.Where(r => r.Width > 1)) {
 					g.DrawRectangle (new Pen (Color.Red, 1.0f), rect);	
+
+
+//					char digit = this.characterClassifier.Detect (block);
+//					readShoppingCart.Append (digit.ToString ());
 				}
 			}
 			ImageBox.Show (this.image, PictureBoxSizeMode.Zoom);
 
+			var readShoppingCart = new StringBuilder ();
 			return readShoppingCart.ToString ();
 		}
 

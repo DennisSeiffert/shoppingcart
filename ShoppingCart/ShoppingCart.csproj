@@ -83,7 +83,6 @@
     <Compile Include="IO\ImageAdapter.cs" />
     <Compile Include="ShoppingCartReader.cs" />
     <Compile Include="CarriageReturn.cs" />
-    <Compile Include="BlankLine.cs" />
     <Compile Include="DigitClassifier.cs" />
     <Compile Include="BlankLineClassifier.cs" />
     <Compile Include="LineSegmentation.cs" />
@@ -92,6 +91,7 @@
     <Compile Include="NeuralNetwork.cs" />
     <Compile Include="LetterClassifier.cs" />
     <Compile Include="CharacterClassifier.cs" />
+    <Compile Include="CharacterBlock.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -19,6 +19,24 @@ namespace ShoppingCart
 			return ' ';
 		}
 
+
+		char ICharacterMatching.Detect (Sample sample, out double probability)
+		{
+			double digitProb, letterProb;
+			char digit, letter;
+			digit = this.digitClassifier.Detect (sample, out digitProb);
+
+			letter = this.letterClassifier.Detect (sample, out letterProb);
+
+			if (letterProb > digitProb) {
+				probability = letterProb;
+				return letter;
+			}
+
+			probability = digitProb;
+			return digit;
+		}
+
 		#endregion
 	}
 }

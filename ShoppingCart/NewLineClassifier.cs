@@ -14,16 +14,19 @@ namespace ShoppingCart
 
 		char ICharacterMatching.Detect (Sample sample)
 		{				
-			return this.OnRecognize (sample);
+			double prob = 0.0;
+			return (this as ICharacterMatching).Detect (sample, out prob);
 		}
 
-		protected virtual char OnRecognize (Sample sample)
+
+		char ICharacterMatching.Detect (Sample sample, out double probability)
 		{
 			var deviation = sample.Values.StandardDeviation (false);
 			if (deviation < 0.1) {
+				probability = 1.0;
 				return '\n';
 			}
-
+			probability = 0.0;
 			return ' ';
 		}
 

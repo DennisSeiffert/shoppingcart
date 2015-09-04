@@ -21,14 +21,18 @@ namespace ShoppingCartTests
 			var line = new List<Sample> ();
 			line.Add (new Sample (new double[]{ 0.0, 1.0, 0.0 }, ' ', 1.0));
 			line.Add (new Sample (new double[]{ 0.0, 1.0, 0.0 }, ' ', 1.0));
+			line.Add (new CarriageReturn (2));
 
 			var result = this.CreateBlocksFromLine (line);
 
-			result.Count ().ShouldEqual (3);
-			result.First ().Values.Sum ().ShouldEqual (2.0);
-			result.ElementAt (1).ShouldBeType<BlankLine> ();
-			(result.ElementAt (1) as BlankLine).Column.ShouldEqual (1);
-			result.Last ().Values.Sum ().ShouldEqual (2.0);
+			result.Count ().ShouldEqual (2);
+			result.ElementAt (0).ShouldBeType<CharacterBlock> ();
+			(result.ElementAt (0) as CharacterBlock).Column.ShouldEqual (0);
+			result.ElementAt (1).ShouldBeType<CharacterBlock> ();
+			(result.ElementAt (1) as CharacterBlock).Column.ShouldEqual (2);
+			(result.ElementAt (1) as CharacterBlock).Row.ShouldEqual (0);
+			(result.ElementAt (1) as CharacterBlock).Width.ShouldEqual (1);
+			(result.ElementAt (1) as CharacterBlock).Height.ShouldEqual (2);
 		}
 
 		[Test]
@@ -42,11 +46,14 @@ namespace ShoppingCartTests
 
 			var result = CreateBlocksFromLine (line);
 
-			result.Count ().ShouldEqual (3);
-			result.First ().Values.Sum ().ShouldEqual (2.0);
-			result.ElementAt (1).ShouldBeType<BlankLine> ();
-			(result.ElementAt (1) as BlankLine).Column.ShouldEqual (1);
-			result.Last ().Values.Sum ().ShouldEqual (2.0);
+			result.Count ().ShouldEqual (2);
+			result.ElementAt (0).ShouldBeType<CharacterBlock> ();
+			(result.ElementAt (0) as CharacterBlock).Column.ShouldEqual (0);
+			result.ElementAt (1).ShouldBeType<CharacterBlock> ();
+			(result.ElementAt (1) as CharacterBlock).Column.ShouldEqual (2);
+			(result.ElementAt (1) as CharacterBlock).Row.ShouldEqual (1);
+			(result.ElementAt (1) as CharacterBlock).Width.ShouldEqual (1);
+			(result.ElementAt (1) as CharacterBlock).Height.ShouldEqual (2);
 		}
 
 		[Test]

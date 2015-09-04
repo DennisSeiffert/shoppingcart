@@ -29,7 +29,7 @@ namespace ShoppingCart
 				Console.Out.WriteLine ("actual: {0}", digit);
 			}
 
-			var shoppingCartReader = new ShoppingCartReader (digitClassifier, new NewLineClassifier (), new BlankLineClassifier ());
+			var shoppingCartReader = new ShoppingCartReader (new CharacterClassifier (digitClassifier, letterClassifier), new NewLineClassifier (), new BlankLineClassifier ());
 			Console.Out.WriteLine (shoppingCartReader.Read (args [0]));
 		}
 

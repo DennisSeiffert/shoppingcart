@@ -23,13 +23,20 @@ namespace ShoppingCart
 
 		char ICharacterMatching.Detect (Sample sample)
 		{
-			var result = this.network.Compute (sample.Values);
-			var maxProbability = result.Max ();
-//			if (maxProbability < 0.2) {
-//				return ' ';
-//			}
+			double prob = 0.0;
+			return (this as ICharacterMatching).Detect (sample, out prob);
+		}
 
-			var recognizedDigit = result.ToList ().IndexOf (maxProbability);
+
+		char ICharacterMatching.Detect (Sample sample, out double probability)
+		{
+			var result = this.network.Compute (sample.Values);
+			probability = result.Max ();
+			//			if (maxProbability < 0.2) {
+			//				return ' ';
+			//			}
+
+			var recognizedDigit = result.ToList ().IndexOf (probability);
 			return (char)recognizedDigit;
 		}
 

@@ -19,28 +19,23 @@ namespace ShoppingCart
 
 		public IEnumerable<Sample> Segment (IEnumerable<Sample> line)
 		{	
-			var lineWithoutCarriageReturnMarkers = line.Where (r => !(r is CarriageReturn)).ToList ();
+			int blockLeftBorder = 0, blockRightBorder = 0;
+			var blockTopBorder = (line.First () as CarriageReturn) != null ? (line.First () as CarriageReturn).Row + 1 : 0;
+			var blockBottomBorder = (line.Last (l => l is CarriageReturn) as CarriageReturn).Row;
 
-			double[,] matrix = Matrix.Create (lineWithoutCarriageReturnMarkers.Count (), 0, 0.0);
+			var lineWithoutCarriageReturnMarkers = line.Where (r => !(r is CarriageReturn)).ToList ();
 			int columns = lineWithoutCarriageReturnMarkers.Any () ? lineWithoutCarriageReturnMarkers.First ().Values.Length : 0;
 			for (int i = 0; i < columns; i++) {
 				var verticalLine = lineWithoutCarriageReturnMarkers.Select (s => s.Values [i]).ToArray ();
 				var character = this.blankLineClassifier.Detect (new Sample (verticalLine, ' ', 1.0));
-				if (character == '|') {																																						
-					yield return Sample.FromIntensityDistribution (matrix);
-					yield return new BlankLine (i);
-
-					matrix = Matrix.Create (lineWithoutCarriageReturnMarkers.Count (), 0, 0.0);								
-				} else {
-					matrix = matrix.InsertColumn (verticalLine);
+				if (character == '|') {
+					blockRightBorder = i;
+					int width = blockRightBorder - blockLeftBorder, height = blockBottomBorder - blockTopBorder;
+					yield return new CharacterBlock (blockTopBorder, blockLeftBorder, width, height);
+					blockLeftBorder = Math.Min (columns - 1, blockRightBorder + 1);
 				}
-			}
-
-			if (matrix.Columns () > 0) {
-				yield return Sample.FromIntensityDistribution (matrix);
-			} else {
-				yield return new BlankLine (0);
-			}
+			}				
+			yield return new CharacterBlock (blockTopBorder, blockLeftBorder, columns - blockLeftBorder, blockBottomBorder - blockTopBorder);
 		}
 	}
 }
