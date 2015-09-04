@@ -90,6 +90,8 @@
     <Compile Include="BlockSegmentation.cs" />
     <Compile Include="IO\LetterDatabaseAdapter.cs" />
     <Compile Include="NeuralNetwork.cs" />
+    <Compile Include="LetterClassifier.cs" />
+    <Compile Include="CharacterClassifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

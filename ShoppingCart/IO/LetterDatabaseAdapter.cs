@@ -8,6 +8,7 @@ using System.Text;
 using Accord.Controls;
 using Accord.Math;
 using Accord.Imaging;
+using System.IO;
 
 namespace ShoppingCart.IO
 {
@@ -15,6 +16,27 @@ namespace ShoppingCart.IO
 	{
 		public LetterDatabaseAdapter ()
 		{
+		}
+
+		public static IEnumerable<Sample> Read (string filename)
+		{
+			return Read (File.ReadLines (filename));
+		}
+
+		public static IEnumerable<Sample> Read (IEnumerable<string> lines)
+		{
+			foreach (var line in lines) {
+				yield return Convert (line);
+			}
+		}
+
+		private static Sample Convert (string line)
+		{
+			var splits = line.Split (new []{ ',' }, StringSplitOptions.RemoveEmptyEntries);
+			if (splits.Length == 64) {
+				splits = splits.Concat (new string[]{ "," }).ToArray ();
+			}
+			return new Sample (splits.Take (64).Select (d => double.Parse (d)).ToArray (), char.Parse (splits.Last ()), 1.0);
 		}
 
 		public string Write (IEnumerable<char> letters, IEnumerable<Font> fonts)

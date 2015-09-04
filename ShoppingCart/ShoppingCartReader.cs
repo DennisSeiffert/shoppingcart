@@ -23,7 +23,7 @@ namespace ShoppingCart
 
 		public ShoppingCartReader (ICharacterMatching digitClassifier, ICharacterMatching newLineClassifier, 
 		                           ICharacterMatching blankLineClassifier)
-		{			
+		{
 			this.lineSegmentation = new LineSegmentation (newLineClassifier);
 			this.blockSegmentation = new BlockSegmentation (blankLineClassifier);
 			this.digitClassifier = digitClassifier;
