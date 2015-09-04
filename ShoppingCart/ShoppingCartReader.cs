@@ -48,6 +48,26 @@ namespace ShoppingCart
 				} 					
 			}				
 
+			for (int i = 1; i < blockRectangles.Count; i++) {
+				var current = blockRectangles [i];
+				var previous = blockRectangles [i - 1];
+				if (previous.Y == current.Y && current.X - previous.X + previous.Width < 5) {
+					current = new Rectangle (previous.X, previous.Y, current.X - previous.X + current.Width, current.Height);
+					blockRectangles.RemoveAt (i - 1);
+					--i;
+				}
+			}	
+//			double[,] imageMatrix = new double[imageRows.Count (), imageRows.First ().Values.Length];
+//			unsafe {
+//				for (int i = 0; i < imageRows.Count (); i++) {
+//					fixed(double* pFirstValue = imageRows.ElementAt (i).Values, pElement = imageMatrix [i, ]) {
+//						double* firstValue = pFirstValue;
+//						double* element = pElement;
+//						element = firstValue;
+//					}
+//				}
+//			}
+
 			using (var g = Graphics.FromImage (this.image)) {
 				foreach (var rect in blockRectangles.Where(r => r.Width > 1)) {
 					g.DrawRectangle (new Pen (Color.Red, 1.0f), rect);	
