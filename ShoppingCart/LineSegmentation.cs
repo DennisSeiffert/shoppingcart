@@ -36,12 +36,14 @@ namespace ShoppingCart
 		}
 
 		private IEnumerable<Sample> InsertCarriageReturnMarker (IEnumerable<Sample> imageDataPerLine)
-		{			
+		{	
+			int rowCounter = 0;
 			foreach (var line in imageDataPerLine) {								
 				if (this.newLineClassifier.Recognize (line) == '\n') {					
-					yield return new CarriageReturn ();
+					yield return new CarriageReturn (rowCounter);
 					continue;
 				}
+				rowCounter++;
 				yield return line;					
 			}
 		}

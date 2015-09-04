@@ -7,6 +7,9 @@ using Accord.Math;
 using System.Linq;
 using Accord.Imaging.Filters;
 using Accord.Controls;
+using Accord.Imaging.Converters;
+using AForge.Imaging.Filters;
+using System.Windows.Forms;
 
 namespace ShoppingCart.IO
 {
@@ -65,6 +68,21 @@ namespace ShoppingCart.IO
 				}
 			}
 			return samples;
+		}
+
+		public static Bitmap Write (double[,] matrix)
+		{
+			// Create the converter to convert the matrix to a image
+			MatrixToImage conv = new MatrixToImage (min: 0, max: 1);
+			// Declare an image and store the pixels on it
+			Bitmap image;
+			conv.Convert (matrix, out image);
+
+			// Show the image on screen
+			image = new ResizeNearestNeighbor (32, 32).Apply (image);
+			// ImageBox.Show (image, PictureBoxSizeMode.Zoom);
+
+			return image;
 		}
 	}
 }
