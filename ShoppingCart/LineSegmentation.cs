@@ -42,7 +42,7 @@ namespace ShoppingCart
 			int rowCounter = 0;
 			foreach (var line in imageDataPerLine) {								
 				rowCounter++;
-				if (this.newLineClassifier.Recognize (line) == '\n') {					
+				if (this.newLineClassifier.Detect (line) == '\n') {					
 					yield return new CarriageReturn (rowCounter - 1);
 					continue;
 				}

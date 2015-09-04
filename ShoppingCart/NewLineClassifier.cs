@@ -12,7 +12,7 @@ namespace ShoppingCart
 
 		#region ICharacterMatching implementation
 
-		char ICharacterMatching.Recognize (Sample sample)
+		char ICharacterMatching.Detect (Sample sample)
 		{				
 			return this.OnRecognize (sample);
 		}

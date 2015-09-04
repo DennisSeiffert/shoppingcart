@@ -57,7 +57,7 @@ namespace ShoppingCart
 						blockRectangles.Add (new Rectangle (blockLeftBorder, blockTopBorder, width, height));	
 					}
 
-					char digit = this.digitClassifier.Recognize (block);
+					char digit = this.digitClassifier.Detect (block);
 					readShoppingCart.Append (digit.ToString ());
 				} 					
 				readShoppingCart.AppendLine ();

@@ -21,7 +21,7 @@ namespace ShoppingCart
 
 		#region ICharacterMatching implementation
 
-		char ICharacterMatching.Recognize (Sample sample)
+		char ICharacterMatching.Detect (Sample sample)
 		{
 			var result = this.network.Compute (sample.Values);
 			var maxProbability = result.Max ();

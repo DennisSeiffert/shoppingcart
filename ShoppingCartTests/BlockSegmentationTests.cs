@@ -65,7 +65,7 @@ namespace ShoppingCartTests
 		private IEnumerable<Sample> CreateBlocksFromLine (List<Sample> line)
 		{
 			var blanklineMatching = Substitute.For<ICharacterMatching> ();
-			blanklineMatching.Recognize (Arg.Any<Sample> ()).Returns ((NSubstitute.Core.CallInfo arg) => {
+			blanklineMatching.Detect (Arg.Any<Sample> ()).Returns ((NSubstitute.Core.CallInfo arg) => {
 				var sample = arg.Arg<Sample> ();
 				if (sample.Values.Sum () == sample.Values.Length)
 					return '|';
