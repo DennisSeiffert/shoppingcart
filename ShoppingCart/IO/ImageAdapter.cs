@@ -80,7 +80,6 @@ namespace ShoppingCart.IO
 
 			// Show the image on screen
 			image = new ResizeNearestNeighbor (32, 32).Apply (image);
-			// ImageBox.Show (image, PictureBoxSizeMode.Zoom);
 
 			return image;
 		}

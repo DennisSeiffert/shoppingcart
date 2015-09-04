@@ -27,6 +27,7 @@ namespace ShoppingCartTests
 			result.Count ().ShouldEqual (3);
 			result.First ().Values.Sum ().ShouldEqual (2.0);
 			result.ElementAt (1).ShouldBeType<BlankLine> ();
+			(result.ElementAt (1) as BlankLine).Column.ShouldEqual (1);
 			result.Last ().Values.Sum ().ShouldEqual (2.0);
 		}
 
@@ -44,6 +45,7 @@ namespace ShoppingCartTests
 			result.Count ().ShouldEqual (3);
 			result.First ().Values.Sum ().ShouldEqual (2.0);
 			result.ElementAt (1).ShouldBeType<BlankLine> ();
+			(result.ElementAt (1) as BlankLine).Column.ShouldEqual (1);
 			result.Last ().Values.Sum ().ShouldEqual (2.0);
 		}
 
