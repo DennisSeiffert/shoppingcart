@@ -4,9 +4,12 @@ namespace ShoppingCart
 {
 	public class BlankLine : Sample
 	{
-		public BlankLine () : base (' ')
+		public BlankLine (int column) : base (' ')
 		{
+			this.Column = column;
 		}
+
+		public int Column { get; private set; }
 	}
 }
 

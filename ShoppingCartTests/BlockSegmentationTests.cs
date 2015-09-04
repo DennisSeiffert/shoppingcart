@@ -24,8 +24,9 @@ namespace ShoppingCartTests
 
 			var result = this.CreateBlocksFromLine (line);
 
-			result.Count ().ShouldEqual (2);
+			result.Count ().ShouldEqual (3);
 			result.First ().Values.Sum ().ShouldEqual (2.0);
+			result.ElementAt (1).ShouldBeType<BlankLine> ();
 			result.Last ().Values.Sum ().ShouldEqual (2.0);
 		}
 
@@ -40,8 +41,9 @@ namespace ShoppingCartTests
 
 			var result = CreateBlocksFromLine (line);
 
-			result.Count ().ShouldEqual (2);
+			result.Count ().ShouldEqual (3);
 			result.First ().Values.Sum ().ShouldEqual (2.0);
+			result.ElementAt (1).ShouldBeType<BlankLine> ();
 			result.Last ().Values.Sum ().ShouldEqual (2.0);
 		}
 
