@@ -4,46 +4,19 @@ using Accord.Neuro;
 using AForge.Neuro.Learning;
 using System.Collections.Generic;
 using System.Linq;
+using Accord.Controls;
+using System.Windows.Forms;
 
 namespace ShoppingCart
 {
-	public class DigitClassifier : ICharacterMatching
+	public class DigitClassifier : NeuralNetwork, ICharacterMatching
 	{
-		private ActivationNetwork network;
-
-		public DigitClassifier (IEnumerable<Sample> samples)
+		public DigitClassifier (IEnumerable<Sample> samples) : base (samples, "0123456789".ToCharArray (), 64, 15, 10)
 		{
-			this.network = this.InitializeNetwork ();
-			this.Train (samples);
 		}
 
-		public DigitClassifier (string filename)
-		{
-			this.network = (ActivationNetwork)ActivationNetwork.Load (filename);
-		}
-
-		private ActivationNetwork InitializeNetwork ()
-		{
-			var sigmoid = new SigmoidFunction ();
-			var network = new ActivationNetwork (sigmoid, 64, 15, 10);
-			new NguyenWidrow (network).Randomize ();
-			return network;
-		}
-
-		private void Train (IEnumerable<Sample> samples)
-		{
-			var learning = new BackPropagationLearning (this.network);
-			foreach (var sample in samples) {
-				double[] expectedResult = new double[10];
-				expectedResult [int.Parse (sample.Character.ToString ())] = 1.0;
-				var error = learning.Run (sample.Values, expectedResult);
-				Console.Out.WriteLine ("Error: {0}", error);
-			}
-		}
-
-		public void Save (string filename)
-		{
-			this.network.Save (filename);
+		public DigitClassifier (string filename) : base (filename)
+		{			
 		}
 
 		#region ICharacterMatching implementation
@@ -51,7 +24,12 @@ namespace ShoppingCart
 		char ICharacterMatching.Recognize (Sample sample)
 		{
 			var result = this.network.Compute (sample.Values);
-			var recognizedDigit = result.ToList ().IndexOf (result.Max ());
+			var maxProbability = result.Max ();
+//			if (maxProbability < 0.2) {
+//				return ' ';
+//			}
+
+			var recognizedDigit = result.ToList ().IndexOf (maxProbability);
 			return (char)recognizedDigit;
 		}
 

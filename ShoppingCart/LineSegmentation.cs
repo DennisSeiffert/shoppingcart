@@ -41,11 +41,11 @@ namespace ShoppingCart
 		{	
 			int rowCounter = 0;
 			foreach (var line in imageDataPerLine) {								
+				rowCounter++;
 				if (this.newLineClassifier.Recognize (line) == '\n') {					
-					yield return new CarriageReturn (rowCounter);
+					yield return new CarriageReturn (rowCounter - 1);
 					continue;
 				}
-				rowCounter++;
 				yield return line;					
 			}
 		}

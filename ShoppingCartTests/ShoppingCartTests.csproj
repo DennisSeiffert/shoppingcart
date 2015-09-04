@@ -52,6 +52,7 @@
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UCIDatasetImportTests.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="ImageAdapterTests.cs" />
     <Compile Include="SampleTests.cs" />
     <Compile Include="BlockSegmentationTests.cs" />
+    <Compile Include="LetterDatabaseAdapterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
