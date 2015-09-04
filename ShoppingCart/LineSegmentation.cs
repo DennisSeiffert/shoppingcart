@@ -22,6 +22,7 @@ namespace ShoppingCart
 			foreach (var row in imageDataPerLineWithCarriageReturns) {
 				if (row is CarriageReturn && !isInline) {
 					line = new List<Sample> ();
+					line.Add (row);
 					isInline = true;
 					continue;
 				}
@@ -29,6 +30,7 @@ namespace ShoppingCart
 					line.Add (row);
 				}
 				if (row is CarriageReturn && isInline && line.Any ()) {
+					line.Add (row);
 					yield return line;
 					isInline = false;
 				}
