@@ -7,8 +7,8 @@ namespace ShoppingCart
 	public class LetterClassifier : NeuralNetwork, ICharacterMatching
 	{
 		public LetterClassifier (IEnumerable<Sample> samples) : base (samples, 
-			                                                             "abcdefghijklmnopqrstuvwxyz".ToCharArray (),
-			                                                             64, 25, "abcdefghijklmnopqrstuvwxyz".Length)
+			                                                             "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray (),
+			                                                             64, 25, "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Length)
 		{
 		}
 
