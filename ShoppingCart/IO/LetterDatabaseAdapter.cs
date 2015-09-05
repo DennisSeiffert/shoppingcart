@@ -9,6 +9,7 @@ using Accord.Controls;
 using Accord.Math;
 using Accord.Imaging;
 using System.IO;
+using AForge.Imaging.Filters;
 
 namespace ShoppingCart.IO
 {
@@ -51,9 +52,23 @@ namespace ShoppingCart.IO
 					}
 
 					// ImageBox.Show (imageLetter);
-					double[,] imageMatrix;					 
-					new ImageToMatrix ().Convert (imageLetter, out imageMatrix);
-					imageMatrix.ApplyInPlace (v => v > 0.8 ? 1.0 : 0.0);
+					var imageMatrix = ConvertToBinaryMatrix (imageLetter);					 
+					imageMatrix = Trim (imageMatrix);
+
+
+					if (imageMatrix.Columns () * imageMatrix.Rows () == 0) {
+						continue;
+					}
+
+					Bitmap croppedImage;
+					new MatrixToImage ().Convert (imageMatrix, out croppedImage);
+					ResizeNearestNeighbor resize = new ResizeNearestNeighbor (32, 32);
+					resize.Apply (croppedImage);
+					//ImageBox.Show (croppedImage, System.Windows.Forms.PictureBoxSizeMode.Zoom);
+
+					imageMatrix = ConvertToBinaryMatrix (croppedImage);
+
+
 					var sample = Sample.FromIntensityDistribution (imageMatrix);
 					sample = new Sample (sample.Values, letter, 1.0);
 
@@ -64,6 +79,25 @@ namespace ShoppingCart.IO
 			}
 
 			return csv.ToString ();
+		}
+
+		private double[,] Trim (double[,] imageMatrix)
+		{			
+			while (imageMatrix.Rows () > 0 && imageMatrix.GetRow (0).Sum () == imageMatrix.Columns ()) {
+				imageMatrix = imageMatrix.RemoveRow (0);
+			}
+			while (imageMatrix.Columns () > 0 && imageMatrix.GetColumn (imageMatrix.Columns () - 1).Sum () == imageMatrix.Rows ()) {
+				imageMatrix = imageMatrix.RemoveColumn (imageMatrix.Columns () - 1);
+			}
+			return imageMatrix;
+		}
+
+		private double[,] ConvertToBinaryMatrix (Bitmap imageLetter)
+		{
+			double[,] imageMatrix;
+			new ImageToMatrix ().Convert (imageLetter, out imageMatrix);
+			imageMatrix.ApplyInPlace (v => v > 0.8 ? 1.0 : 0.0);
+			return imageMatrix;
 		}
 	}
 }
