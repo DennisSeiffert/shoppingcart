@@ -31,7 +31,7 @@ namespace ShoppingCartTests
 
 			result.ShouldNotBeEmpty ();
 
-			File.WriteAllText ("optletters.tra", result);
+			// File.WriteAllText ("optletters.tra", result);
 		}
 	}
 }
