@@ -31,8 +31,8 @@ namespace ShoppingCart
 
 		public string Read (string shoppingCartImageFilename)
 		{
-			this.image = new Bitmap (shoppingCartImageFilename);
-			return this.Read (ImageAdapter.Read (shoppingCartImageFilename));
+			this.image = ImageAdapter.BinarizeImage (shoppingCartImageFilename);
+			return this.Read (ImageAdapter.Read (this.image));
 		}
 
 		public string Read (IEnumerable<Sample> imageRows)
@@ -68,19 +68,29 @@ namespace ShoppingCart
 //				}
 //			}
 
+			var readShoppingCart = new List<char> ();
 			using (var g = Graphics.FromImage (this.image)) {
 				foreach (var rect in blockRectangles.Where(r => r.Width > 1)) {
 					g.DrawRectangle (new Pen (Color.Red, 1.0f), rect);	
+					var imageMatrix = Matrix.Create<double> (0, rect.Width);
+					for (int i = rect.Y; i < rect.Y + rect.Height; i++) {
+						
+						imageMatrix = imageMatrix.InsertRow (imageRows.ElementAt (i).Values.Submatrix (rect.X, rect.X + rect.Width - 1));
+					}
 
+					Bitmap blockImage;
+					new Accord.Imaging.Converters.MatrixToImage ().Convert (imageMatrix, out blockImage);
+//					ImageBox.Show (blockImage);
+					imageMatrix = LetterDatabaseAdapter.NormalizeBitmap (blockImage);
+					var block = Sample.FromIntensityDistribution (imageMatrix);
+					char digit = this.characterClassifier.Detect (block);
 
-//					char digit = this.characterClassifier.Detect (block);
-//					readShoppingCart.Append (digit.ToString ());
+					readShoppingCart.Add (digit);
 				}
 			}
 			ImageBox.Show (this.image, PictureBoxSizeMode.Zoom);
-
-			var readShoppingCart = new StringBuilder ();
-			return readShoppingCart.ToString ();
+					
+			return new string (readShoppingCart.ToArray ());
 		}
 
 

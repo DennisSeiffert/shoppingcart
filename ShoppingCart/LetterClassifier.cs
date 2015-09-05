@@ -6,10 +6,15 @@ namespace ShoppingCart
 {
 	public class LetterClassifier : NeuralNetwork, ICharacterMatching
 	{
+		public const string LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄ,.-+*=;:_";
+		//public const string LETTERS = "ABCDEFGHI";
+		private char[] letters;
+
 		public LetterClassifier (IEnumerable<Sample> samples) : base (samples, 
-			                                                             "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray (),
-			                                                             64, 25, "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Length)
+			                                                             LETTERS.ToCharArray (),
+			                                                             64, 35, LETTERS.Length)
 		{
+			letters = LETTERS.ToCharArray ();
 		}
 
 		#region ICharacterMatching implementation
@@ -27,7 +32,7 @@ namespace ShoppingCart
 			probability = result.Max ();
 
 			var recognizedDigit = result.ToList ().IndexOf (probability);
-			return (char)recognizedDigit;
+			return this.letters [recognizedDigit];
 		}
 
 		#endregion

@@ -15,16 +15,18 @@ namespace ShoppingCart.IO
 {
 	public class ImageAdapter
 	{
-		public static IEnumerable<Sample> Read (string filename, bool binarizeImage = true)
+		public static IEnumerable<Sample> Read (string filename)
 		{
 			int stride;
 			Bitmap image = null;
-			if (binarizeImage) {
-				image = BinarizeImage (filename);	
-			} else {
-				image = new Bitmap (filename);
-			}
+			image = new Bitmap (filename);
 
+			return Read (image);
+		}
+
+		public static IEnumerable<Sample> Read (Bitmap image)
+		{
+			int stride;
 			var rgbValues = ExtractImageRawData (image, out stride);
 			return ConvertToGrayScaleSamples (rgbValues, stride);
 		}
@@ -48,9 +50,26 @@ namespace ShoppingCart.IO
 			return rgbValues;
 		}
 
-		private static Bitmap BinarizeImage (string filename)
+		private static Bitmap ResizeToStandardSize (Bitmap myImage)
+		{
+			int largestSide = 1024;
+			int height = largestSide, width = (int)Math.Floor (myImage.Width / (double)myImage.Height * largestSide);
+			if (myImage.Width > myImage.Height) {
+				width = largestSide;
+				height = (int)Math.Floor (myImage.Height / (double)myImage.Width * largestSide);
+			}
+			var resize = new ResizeNearestNeighbor (width, height);
+			myImage = resize.Apply (myImage);
+
+			return myImage;
+		}
+
+		public static Bitmap BinarizeImage (string filename)
 		{
 			Bitmap myImage = new Bitmap (filename);
+
+			myImage = ResizeToStandardSize (myImage);
+
 			var niblack = new SauvolaThreshold ();
 			Bitmap result = niblack.Apply (myImage);
 			return result;
@@ -60,12 +79,12 @@ namespace ShoppingCart.IO
 		{
 			var samples = new List<Sample> ();
 			var grayScaleValues = new List<double> ();
-			for (int i = 0; i < rgbValues.Length; i += 3) {
-				grayScaleValues.Add (0.333333 * (rgbValues [i] + rgbValues [i + 1] + rgbValues [i + 2]));
+			for (int i = 0; i < rgbValues.Length; i += 3) {				
 				if (i > 0 && i % stride == 0) {
 					samples.Add (new Sample (grayScaleValues.ToArray (), ' ', 255.0));
 					grayScaleValues.Clear ();
 				}
+				grayScaleValues.Add (0.333333 * (rgbValues [i] + rgbValues [i + 1] + rgbValues [i + 2]));
 			}
 			return samples;
 		}

@@ -16,7 +16,8 @@ namespace ShoppingCart
 
 		char ICharacterMatching.Detect (Sample sample)
 		{
-			return ' ';
+			double probability;
+			return (this as ICharacterMatching).Detect (sample, out probability);
 		}
 
 
@@ -28,7 +29,7 @@ namespace ShoppingCart
 
 			letter = this.letterClassifier.Detect (sample, out letterProb);
 
-			if (letterProb > digitProb) {
+			if (letterProb > 0.0) {
 				probability = letterProb;
 				return letter;
 			}

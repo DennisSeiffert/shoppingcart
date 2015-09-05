@@ -37,10 +37,9 @@ namespace ShoppingCart
 			//			}
 
 			var recognizedDigit = result.ToList ().IndexOf (probability);
-			return (char)recognizedDigit;
+			return recognizedDigit.ToString ().ToCharArray ().First ();		
 		}
 
 		#endregion
 	}
 }
-

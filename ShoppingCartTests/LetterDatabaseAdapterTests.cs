@@ -18,8 +18,7 @@ namespace ShoppingCartTests
 
 		[Test]
 		public void ShouldCreateLetterDatabase ()
-		{
-			var sut = new LetterDatabaseAdapter ();
+		{			
 			InstalledFontCollection fontFamilies = new InstalledFontCollection ();
 			var fonts = fontFamilies.Families.Select (fF => new Font (
 				            fF,
@@ -27,11 +26,11 @@ namespace ShoppingCartTests
 				            FontStyle.Regular,
 				            GraphicsUnit.Pixel)).ToArray ();
 			string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄ,.-+*=;:_";
-			var result = sut.Write (letters.ToCharArray (), fonts.Take (100));
+			var result = LetterDatabaseAdapter.Write (letters.ToCharArray (), fonts.Take (100));
 
 			result.ShouldNotBeEmpty ();
 
-			// File.WriteAllText ("optletters.tra", result);
+			File.WriteAllText ("optletters.tra", result);
 		}
 	}
 }
