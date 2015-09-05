@@ -21,7 +21,7 @@ namespace ShoppingCart
 			var digitClassifier = new DigitClassifier (OptDigitDatabaseAdapter.Read (@"../resources/optdigits.tra"));
 			//digitClassifier.Save ("digitRecognition.ann");
 
-			var letterClassifier = new LetterClassifier (LetterDatabaseAdapter.Read (@"../resources/optletters.tra").Where (s => "abcdefghijklmnopqrstuvwxyz".ToCharArray ().Contains (s.Character)));
+			var letterClassifier = new LetterClassifier (LetterDatabaseAdapter.Read (@"../resources/optletters.tra").Where (s => "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray ().Contains (s.Character)));
 
 			foreach (var testSample in OptDigitDatabaseAdapter.Read(@"../resources/optdigits.tes")) {
 				var digit = (digitClassifier as ICharacterMatching).Detect (testSample);

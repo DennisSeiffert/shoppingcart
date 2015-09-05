@@ -23,7 +23,7 @@ namespace ShoppingCartTests
 			InstalledFontCollection fontFamilies = new InstalledFontCollection ();
 			var fonts = fontFamilies.Families.Select (fF => new Font (
 				            fF,
-				            30,
+				            24,
 				            FontStyle.Regular,
 				            GraphicsUnit.Pixel)).ToArray ();
 			string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄ,.-+*=;:_";
@@ -31,7 +31,7 @@ namespace ShoppingCartTests
 
 			result.ShouldNotBeEmpty ();
 
-			//File.WriteAllText ("optLetter.tra", result);
+			File.WriteAllText ("optletters.tra", result);
 		}
 	}
 }
