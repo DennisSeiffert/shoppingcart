@@ -28,8 +28,8 @@ namespace ShoppingCart
 			digit = this.digitClassifier.Detect (sample, out digitProb);
 
 			letter = this.letterClassifier.Detect (sample, out letterProb);
-
 			if (letterProb > digitProb) {
+				//if (letterProb > 0.0) {
 				probability = letterProb;
 				return letter;
 			}

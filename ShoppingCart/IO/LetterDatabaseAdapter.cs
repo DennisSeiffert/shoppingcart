@@ -43,7 +43,7 @@ namespace ShoppingCart.IO
 			new MatrixToImage ().Convert (imageMatrix, out croppedImage);
 			ResizeNearestNeighbor resize = new ResizeNearestNeighbor (32, 32);
 			croppedImage = resize.Apply (croppedImage);
-			//ImageBox.Show (croppedImage, System.Windows.Forms.PictureBoxSizeMode.Zoom);
+			// ImageBox.Show (croppedImage, System.Windows.Forms.PictureBoxSizeMode.Zoom);
 			imageMatrix = ConvertToBinaryMatrix (croppedImage);
 			return imageMatrix;
 		}
@@ -83,12 +83,21 @@ namespace ShoppingCart.IO
 		}
 
 		private static double[,] Trim (double[,] imageMatrix)
-		{			
+		{				
 			while (imageMatrix.Rows () > 0 && imageMatrix.GetRow (0).Sum () == imageMatrix.Columns ()) {
 				imageMatrix = imageMatrix.RemoveRow (0);
 			}
+			int lastRow = imageMatrix.Rows () - 1;
+			while (imageMatrix.Rows () > 0 && imageMatrix.GetRow (lastRow).Sum () == imageMatrix.Columns ()) {
+				imageMatrix = imageMatrix.RemoveRow (lastRow);
+				lastRow = imageMatrix.Rows () - 1;
+			}
+
 			while (imageMatrix.Columns () > 0 && imageMatrix.GetColumn (imageMatrix.Columns () - 1).Sum () == imageMatrix.Rows ()) {
 				imageMatrix = imageMatrix.RemoveColumn (imageMatrix.Columns () - 1);
+			}
+			while (imageMatrix.Columns () > 0 && imageMatrix.GetColumn (0).Sum () == imageMatrix.Rows ()) {
+				imageMatrix = imageMatrix.RemoveColumn (0);
 			}
 			return imageMatrix;
 		}

@@ -86,7 +86,7 @@ namespace ShoppingCart
 					var block = Sample.FromIntensityDistribution (imageMatrix);
 					char digit = this.characterClassifier.Detect (block);
 
-					g.DrawString (new string (digit, 1), new Font ("Arial", 10), Brushes.LimeGreen, rect.X, rect.Y);
+					g.DrawString (new string (digit, 1), new Font ("Arial", 12), Brushes.Blue, rect.X, Math.Max (rect.Y - 15, 0));
 
 					readShoppingCart.Add (digit);
 				}
