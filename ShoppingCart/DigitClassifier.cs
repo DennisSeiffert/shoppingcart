@@ -11,7 +11,10 @@ namespace ShoppingCart
 {
 	public class DigitClassifier : NeuralNetwork, ICharacterMatching
 	{
-		public DigitClassifier (IEnumerable<Sample> samples) : base (samples, "0123456789".ToCharArray (), 64, 15, 10)
+		public const string DIGITS = "0123456789";
+		private char[] digits = DIGITS.ToCharArray ();
+
+		public DigitClassifier (IEnumerable<Sample> samples) : base (samples, DIGITS.ToCharArray (), 64, 15, DIGITS.Length)
 		{
 		}
 
@@ -36,8 +39,8 @@ namespace ShoppingCart
 			//				return ' ';
 			//			}
 
-			var recognizedDigit = result.ToList ().IndexOf (probability);
-			return recognizedDigit.ToString ().ToCharArray ().First ();		
+			var indexOfRecognizedDigit = result.ToList ().IndexOf (probability);
+			return digits [indexOfRecognizedDigit];		
 		}
 
 		#endregion

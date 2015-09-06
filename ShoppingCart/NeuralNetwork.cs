@@ -35,11 +35,15 @@ namespace ShoppingCart
 		private void Train (char[] trainingSet, IEnumerable<Sample> samples)
 		{
 			var learning = new BackPropagationLearning (this.network);
-			foreach (var sample in samples) {				
-				double[] expectedResult = new double[this.network.Layers.Last ().Neurons.Length];
-				expectedResult [trainingSet.ToList ().IndexOf (sample.Character)] = 1.0;
-				var error = learning.Run (sample.Values, expectedResult);
-				Console.Out.WriteLine ("Error: {0}", error);
+			var error = double.MaxValue;
+			var innerSamples = samples.ToList ();
+			while (error > 0.1) {
+				foreach (var sample in innerSamples) {				
+					double[] expectedResult = new double[this.network.Layers.Last ().Neurons.Length];
+					expectedResult [trainingSet.ToList ().IndexOf (sample.Character)] = 1.0;
+					error = learning.Run (sample.Values, expectedResult);
+					Console.Out.WriteLine ("Error: {0}", error);
+				}
 			}
 		}
 

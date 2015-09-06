@@ -29,7 +29,7 @@ namespace ShoppingCart
 
 			letter = this.letterClassifier.Detect (sample, out letterProb);
 
-			if (letterProb > 0.0) {
+			if (letterProb > digitProb) {
 				probability = letterProb;
 				return letter;
 			}

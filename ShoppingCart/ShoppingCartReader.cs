@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Text;
 using Accord.Controls;
 using System.Windows.Forms;
+using System.Drawing.Text;
 
 namespace ShoppingCart
 {
@@ -84,6 +85,8 @@ namespace ShoppingCart
 					imageMatrix = LetterDatabaseAdapter.NormalizeBitmap (blockImage);
 					var block = Sample.FromIntensityDistribution (imageMatrix);
 					char digit = this.characterClassifier.Detect (block);
+
+					g.DrawString (new string (digit, 1), new Font ("Arial", 10), Brushes.LimeGreen, rect.X, rect.Y);
 
 					readShoppingCart.Add (digit);
 				}

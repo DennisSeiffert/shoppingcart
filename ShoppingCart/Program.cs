@@ -18,7 +18,8 @@ namespace ShoppingCart
 	{
 		public static void Main (string[] args)
 		{	
-			var digitClassifier = new DigitClassifier (OptDigitDatabaseAdapter.Read (@"../resources/optdigits.tra"));
+//			var digitClassifier = new DigitClassifier (OptDigitDatabaseAdapter.Read (@"../resources/optdigits.tra"));
+			var digitClassifier = new DigitClassifier (LetterDatabaseAdapter.Read (@"../resources/optdigitsblockletters.tra"));
 			//digitClassifier.Save ("digitRecognition.ann");
 
 			var letterClassifier = new LetterClassifier (LetterDatabaseAdapter.Read (@"../resources/optletters.tra").Where (s => LetterClassifier.LETTERS.ToCharArray ().Contains (s.Character)));

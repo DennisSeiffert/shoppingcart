@@ -7,6 +7,7 @@ namespace ShoppingCart
 	public class LetterClassifier : NeuralNetwork, ICharacterMatching
 	{
 		public const string LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZüöäÜÖÄ,.-+*=;:_";
+		//public const string LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		//public const string LETTERS = "ABCDEFGHI";
 		private char[] letters;
 
