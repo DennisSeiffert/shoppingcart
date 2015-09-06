@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace ShoppingCart
 {
@@ -10,6 +11,16 @@ namespace ShoppingCart
 			this.Width = width;
 			this.Row = row;
 			this.Column = column;
+		}
+
+		public bool IsEmpty ()
+		{
+			return Width * Height == 0;
+		}
+
+		public Rectangle ToRectangle ()
+		{
+			return new Rectangle (this.Column, this.Row, this.Width, this.Height);
 		}
 
 		public int Height { get; private set; }

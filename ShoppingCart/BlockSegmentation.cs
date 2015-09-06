@@ -17,7 +17,44 @@ namespace ShoppingCart
 			this.blankLineClassifier = blankLineClassifier;
 		}
 
-		public IEnumerable<Sample> Segment (IEnumerable<Sample> line)
+		public IList<CharacterBlock> MergeNeighboredBlocks (IList<CharacterBlock> blocks)
+		{
+			for (int i = 1; i < blocks.Count; i++) {
+				var current = blocks [i];
+				var previous = blocks [i - 1];
+				if (previous.Row == current.Row && current.Column - previous.Column + previous.Width < 5) {
+					blocks [i] = new CharacterBlock (previous.Row, previous.Column, current.Column - previous.Column + current.Width, current.Height);
+					blocks.RemoveAt (i - 1);
+					--i;
+				}
+			}
+
+			return blocks;
+		}
+
+		public IList<CharacterBlock> RemoveEmptyBlocks (IList<CharacterBlock> blocks)
+		{
+			for (int i = 0; i < blocks.Count; i++) {
+				if (blocks [i].IsEmpty ()) {
+					blocks.RemoveAt (i);
+					--i;
+				}
+			}
+			return blocks;
+		}
+
+		public IList<CharacterBlock> RemoveSkinnyBlocks (IList<CharacterBlock> blocks)
+		{
+			for (int i = 0; i < blocks.Count; i++) {
+				if (blocks [i].Width < 2) {
+					blocks.RemoveAt (i);
+					--i;
+				}
+			}
+			return blocks;
+		}
+
+		public IEnumerable<CharacterBlock> Segment (IEnumerable<Sample> line)
 		{	
 			int blockLeftBorder = 0, blockRightBorder = 0;
 			var blockTopBorder = (line.First () as CarriageReturn) != null ? (line.First () as CarriageReturn).Row + 1 : 0;

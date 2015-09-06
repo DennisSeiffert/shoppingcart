@@ -69,6 +69,54 @@ namespace ShoppingCartTests
 			result.First ().Values.Sum ().ShouldEqual (0.0);
 		}
 
+		[Test]
+		public void ShouldMergeNeighboredBlocks ()
+		{
+			var blocks = new List<CharacterBlock> ();
+			blocks.Add (new CharacterBlock (0, 0, 2, 2));
+			blocks.Add (new CharacterBlock (0, 2, 2, 2));
+			blocks.Add (new CharacterBlock (0, 10, 2, 2));
+			blocks.Add (new CharacterBlock (0, 16, 2, 2));
+
+			var sut = new BlockSegmentation (Substitute.For<ICharacterMatching> ());
+			var result = sut.MergeNeighboredBlocks (blocks);
+
+			result.Count.ShouldEqual (3);
+			result [0].Row.ShouldEqual (0);
+			result [0].Column.ShouldEqual (0);
+			result [0].Width.ShouldEqual (4);
+			result [0].Height.ShouldEqual (2);
+
+			result [1].Row.ShouldEqual (0);
+			result [1].Column.ShouldEqual (10);
+			result [1].Width.ShouldEqual (2);
+			result [1].Height.ShouldEqual (2);
+
+			result [2].Row.ShouldEqual (0);
+			result [2].Column.ShouldEqual (16);
+			result [2].Width.ShouldEqual (2);
+			result [2].Height.ShouldEqual (2);
+		}
+
+		[Test]
+		public void ShouldRemoveEmptyBlocks ()
+		{
+			var blocks = new List<CharacterBlock> ();
+			blocks.Add (new CharacterBlock (0, 0, 0, 2));
+			blocks.Add (new CharacterBlock (0, 2, 2, 0));
+			blocks.Add (new CharacterBlock (0, 10, 2, 2));
+			blocks.Add (new CharacterBlock (0, 16, 0, 2));
+
+			var sut = new BlockSegmentation (Substitute.For<ICharacterMatching> ());
+			var result = sut.RemoveEmptyBlocks (blocks);
+
+			result.Count.ShouldEqual (1);
+			result [0].Row.ShouldEqual (0);
+			result [0].Column.ShouldEqual (10);
+			result [0].Width.ShouldEqual (2);
+			result [0].Height.ShouldEqual (2);
+		}
+
 		private IEnumerable<Sample> CreateBlocksFromLine (List<Sample> line)
 		{
 			var blanklineMatching = Substitute.For<ICharacterMatching> ();

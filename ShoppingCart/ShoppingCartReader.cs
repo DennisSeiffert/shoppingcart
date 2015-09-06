@@ -39,54 +39,35 @@ namespace ShoppingCart
 		public string Read (IEnumerable<Sample> imageRows)
 		{			
 			var lines = this.lineSegmentation.Segment (imageRows).ToList ();
-			var blockRectangles = new List<Rectangle> ();
+			var blocks = new List<CharacterBlock> ();
 
 			foreach (var line in lines) {				
-				foreach (var block in this.blockSegmentation.Segment (line).Cast<CharacterBlock>()) {						
-					if (block.Width * block.Height > 0) {
-						blockRectangles.Add (new Rectangle (block.Column, block.Row, block.Width, block.Height));	
-					}
-				} 					
-			}				
+				blocks.AddRange (this.blockSegmentation.Segment (line));
+			}								
 
-			for (int i = 1; i < blockRectangles.Count; i++) {
-				var current = blockRectangles [i];
-				var previous = blockRectangles [i - 1];
-				if (previous.Y == current.Y && current.X - previous.X + previous.Width < 5) {
-					current = new Rectangle (previous.X, previous.Y, current.X - previous.X + current.Width, current.Height);
-					blockRectangles.RemoveAt (i - 1);
-					--i;
-				}
-			}	
-//			double[,] imageMatrix = new double[imageRows.Count (), imageRows.First ().Values.Length];
-//			unsafe {
-//				for (int i = 0; i < imageRows.Count (); i++) {
-//					fixed(double* pFirstValue = imageRows.ElementAt (i).Values, pElement = imageMatrix [i, ]) {
-//						double* firstValue = pFirstValue;
-//						double* element = pElement;
-//						element = firstValue;
-//					}
-//				}
-//			}
+			blocks = this.blockSegmentation.RemoveEmptyBlocks (blocks).ToList ();
+			blocks = this.blockSegmentation.MergeNeighboredBlocks (blocks).ToList ();
+			blocks = this.blockSegmentation.RemoveSkinnyBlocks (blocks).ToList ();
 
 			var readShoppingCart = new List<char> ();
 			using (var g = Graphics.FromImage (this.image)) {
-				foreach (var rect in blockRectangles.Where(r => r.Width > 1)) {
-					g.DrawRectangle (new Pen (Color.Red, 1.0f), rect);	
-					var imageMatrix = Matrix.Create<double> (0, rect.Width);
-					for (int i = rect.Y; i < rect.Y + rect.Height; i++) {
-						
-						imageMatrix = imageMatrix.InsertRow (imageRows.ElementAt (i).Values.Submatrix (rect.X, rect.X + rect.Width - 1));
+				foreach (var block in blocks) {
+					g.DrawRectangle (new Pen (Color.Red, 1.0f), block.ToRectangle ());	
+
+					var imageMatrix = Matrix.Create<double> (0, block.Width);
+					for (int i = block.Row; i < block.Row + block.Height; i++) {						
+						imageMatrix = imageMatrix.InsertRow (imageRows.ElementAt (i).Values.Submatrix (block.Column, block.Column + block.Width - 1));
 					}
 
 					Bitmap blockImage;
 					new Accord.Imaging.Converters.MatrixToImage ().Convert (imageMatrix, out blockImage);
 //					ImageBox.Show (blockImage);
 					imageMatrix = LetterDatabaseAdapter.NormalizeBitmap (blockImage);
-					var block = Sample.FromIntensityDistribution (imageMatrix);
-					char digit = this.characterClassifier.Detect (block);
+					var intensityBlock = Sample.FromIntensityDistribution (imageMatrix);
 
-					g.DrawString (new string (digit, 1), new Font ("Arial", 12), Brushes.Blue, rect.X, Math.Max (rect.Y - 15, 0));
+					char digit = this.characterClassifier.Detect (intensityBlock);
+
+					g.DrawString (new string (digit, 1), new Font ("Arial", 12), Brushes.Blue, block.Column, Math.Max (block.Row - 15, 0));
 
 					readShoppingCart.Add (digit);
 				}

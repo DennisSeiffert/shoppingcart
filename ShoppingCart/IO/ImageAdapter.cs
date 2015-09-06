@@ -16,8 +16,7 @@ namespace ShoppingCart.IO
 	public class ImageAdapter
 	{
 		public static IEnumerable<Sample> Read (string filename)
-		{
-			int stride;
+		{			
 			Bitmap image = null;
 			image = new Bitmap (filename);
 
