@@ -17,13 +17,13 @@ namespace ShoppingCartTests
 		[Test]
 		public void ShouldCreateIntensityDistributionFromDiagonalQuadraticMatrix ()
 		{
-			double[,] matrix = Matrix.Diagonal (15, 1.0);
+			double[,] matrix = Matrix.Diagonal (32, 1.0);
 			var result = Sample.FromIntensityDistribution (matrix);
 
 			result.Values.Length.ShouldEqual (64);
 			int shift = 0;
-			for (int i = 0; i < result.Values.Length; i += 8) {
-				result.Values [i + shift].ShouldEqual (shift < 7 ? 0.5 : 0.0);	
+			for (int i = 0; i < result.Values.Length; i += 9) {
+				result.Values [i].ShouldEqual (0.75);	
 				shift++;
 			}
 		}
@@ -31,7 +31,7 @@ namespace ShoppingCartTests
 		[Test]
 		public void ShouldCreateIntensityDistributionFromRectangularMatrix ()
 		{
-			double[,] matrix = Matrix.Create (17, 15, 1.0);
+			double[,] matrix = Matrix.Create (32, 32, 1.0);
 			var result = Sample.FromIntensityDistribution (matrix);
 
 			result.Values.Length.ShouldEqual (64);	
