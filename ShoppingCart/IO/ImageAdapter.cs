@@ -10,6 +10,7 @@ using Accord.Controls;
 using Accord.Imaging.Converters;
 using AForge.Imaging.Filters;
 using System.Windows.Forms;
+using Accord.Imaging.Moments;
 
 namespace ShoppingCart.IO
 {
@@ -68,6 +69,11 @@ namespace ShoppingCart.IO
 			Bitmap myImage = new Bitmap (filename);
 
 			myImage = ResizeToStandardSize (myImage);
+
+			var moments = new CentralMoments ();
+			moments.Compute (myImage);
+			double rotateCor = Math.Round (90.0 - moments.GetOrientation () * 180.0 / Math.PI, 1);
+			Console.Out.WriteLine ("Orientation of image: {0}", rotateCor);
 
 			var niblack = new SauvolaThreshold ();
 			Bitmap result = niblack.Apply (myImage);

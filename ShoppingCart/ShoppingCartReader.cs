@@ -63,13 +63,16 @@ namespace ShoppingCart
 					new Accord.Imaging.Converters.MatrixToImage ().Convert (imageMatrix, out blockImage);
 //					ImageBox.Show (blockImage);
 					imageMatrix = LetterDatabaseAdapter.NormalizeBitmap (blockImage);
-					var intensityBlock = Sample.FromIntensityDistribution (imageMatrix);
 
-					char digit = this.characterClassifier.Detect (intensityBlock);
+					if (imageMatrix.Length > 0) {										
+						var intensityBlock = Sample.FromIntensityDistribution (imageMatrix);
 
-					g.DrawString (new string (digit, 1), new Font ("Arial", 12), Brushes.Blue, block.Column, Math.Max (block.Row - 15, 0));
+						char digit = this.characterClassifier.Detect (intensityBlock);
 
-					readShoppingCart.Add (digit);
+						g.DrawString (new string (digit, 1), new Font ("Arial", 12), Brushes.Blue, block.Column, Math.Max (block.Row - 15, 0));
+
+						readShoppingCart.Add (digit);
+					}
 				}
 			}
 			ImageBox.Show (this.image, PictureBoxSizeMode.Zoom);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Accord.Statistics;
 
@@ -21,17 +21,8 @@ namespace ShoppingCart
 
 		char ICharacterMatching.Detect (Sample sample, out double probability)
 		{
-			int lineFragments = 0;
-			for (int i = 0; i < sample.Values.Length; i += 10) {
-				var sum = 0.0;
-				for (int index = i; index < Math.Min (sample.Values.Length, i + 10); index++)
-					sum += sample.Values [index];
-				if (sum > 9.95)
-					lineFragments++;
-			}
-
-
-			if (lineFragments / (sample.Values.Length / 10.0) > 0.9) {
+			var deviation = sample.Values.StandardDeviation (false);
+			if (deviation < 0.1) {
 				probability = 1.0;
 				return '\n';
 			}
