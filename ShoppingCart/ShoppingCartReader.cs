@@ -39,44 +39,47 @@ namespace ShoppingCart
 		public string Read (IEnumerable<Sample> imageRows)
 		{			
 			var lines = this.lineSegmentation.Segment (imageRows).ToList ();
-			var blocks = new List<CharacterBlock> ();
-
-			foreach (var line in lines) {				
-				blocks.AddRange (this.blockSegmentation.Segment (line));
-			}								
-
-			blocks = this.blockSegmentation.RemoveEmptyBlocks (blocks).ToList ();
-			blocks = this.blockSegmentation.MergeNeighboredBlocks (blocks).ToList ();
-			blocks = this.blockSegmentation.RemoveSkinnyBlocks (blocks).ToList ();
-
 			var readShoppingCart = new List<char> ();
+
 			using (var g = Graphics.FromImage (this.image)) {
-				foreach (var block in blocks) {
-					g.DrawRectangle (new Pen (Color.Red, 1.0f), block.ToRectangle ());	
+				foreach (var line in lines) {
+					var endOfPreviousBlock = 0;	
+					var blocksPerLine = this.blockSegmentation.Segment (line).ToList ();
+					blocksPerLine = this.blockSegmentation.RemoveEmptyBlocks (blocksPerLine).ToList ();
+					blocksPerLine = this.blockSegmentation.MergeNeighboredBlocks (blocksPerLine).ToList ();
+					blocksPerLine = this.blockSegmentation.RemoveSkinnyBlocks (blocksPerLine).ToList ();
 
-					var imageMatrix = Matrix.Create<double> (0, block.Width);
-					for (int i = block.Row; i < block.Row + block.Height; i++) {						
-						imageMatrix = imageMatrix.InsertRow (imageRows.ElementAt (i).Values.Submatrix (block.Column, block.Column + block.Width - 1));
+					foreach (var block in blocksPerLine) {
+						var distance = block.Column - endOfPreviousBlock;
+						readShoppingCart.AddRange (Enumerable.Repeat (' ', (int)Math.Floor (distance / 5.0)));
+						endOfPreviousBlock = block.Column + block.Width;
+						g.DrawRectangle (new Pen (Color.Red, 1.0f), block.ToRectangle ());	
+
+						var imageMatrix = Matrix.Create<double> (0, block.Width);
+						for (int i = block.Row; i < block.Row + block.Height; i++) {						
+							imageMatrix = imageMatrix.InsertRow (imageRows.ElementAt (i).Values.Submatrix (block.Column, block.Column + block.Width - 1));
+						}
+
+						Bitmap blockImage;
+						new Accord.Imaging.Converters.MatrixToImage ().Convert (imageMatrix, out blockImage);
+						//					ImageBox.Show (blockImage);
+						imageMatrix = LetterDatabaseAdapter.NormalizeBitmap (blockImage);
+
+						if (imageMatrix.Length > 0) {										
+							var intensityBlock = Sample.FromIntensityDistribution (imageMatrix);
+
+							char digit = this.characterClassifier.Detect (intensityBlock);
+
+							g.DrawString (new string (digit, 1), new Font ("Arial", 12), Brushes.Blue, block.Column, Math.Max (block.Row - 15, 0));
+
+							readShoppingCart.Add (digit);
+						}
 					}
-
-					Bitmap blockImage;
-					new Accord.Imaging.Converters.MatrixToImage ().Convert (imageMatrix, out blockImage);
-//					ImageBox.Show (blockImage);
-					imageMatrix = LetterDatabaseAdapter.NormalizeBitmap (blockImage);
-
-					if (imageMatrix.Length > 0) {										
-						var intensityBlock = Sample.FromIntensityDistribution (imageMatrix);
-
-						char digit = this.characterClassifier.Detect (intensityBlock);
-
-						g.DrawString (new string (digit, 1), new Font ("Arial", 12), Brushes.Blue, block.Column, Math.Max (block.Row - 15, 0));
-
-						readShoppingCart.Add (digit);
-					}
-				}
-			}
+					readShoppingCart.Add ('\n');
+				}	
+			}				
+		
 			ImageBox.Show (this.image, PictureBoxSizeMode.Zoom);
-					
 			return new string (readShoppingCart.ToArray ());
 		}
 

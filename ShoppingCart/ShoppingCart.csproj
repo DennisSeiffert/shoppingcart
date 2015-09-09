@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Commandlineparameters>/commondata/Programming/Repositories/shoppingcart/ShoppingCartTests/testImage.jpg</Commandlineparameters>
+    <Commandlineparameters>"/commondata/Pictures/KameraUploads/2014-03-10 09.44.39.jpg"</Commandlineparameters>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

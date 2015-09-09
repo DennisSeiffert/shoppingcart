@@ -33,7 +33,7 @@ namespace ShoppingCart
 		}
 
 		public IList<CharacterBlock> RemoveEmptyBlocks (IList<CharacterBlock> blocks)
-		{
+		{			
 			for (int i = 0; i < blocks.Count; i++) {
 				if (blocks [i].IsEmpty ()) {
 					blocks.RemoveAt (i);
