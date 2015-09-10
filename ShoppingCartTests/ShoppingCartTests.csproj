@@ -53,6 +53,9 @@
       <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="Antlr4.Runtime">
+      <HintPath>..\packages\Antlr-4.5.1\Antlr4.Runtime.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UCIDatasetImportTests.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="SampleTests.cs" />
     <Compile Include="BlockSegmentationTests.cs" />
     <Compile Include="LetterDatabaseAdapterTests.cs" />
+    <Compile Include="VoucherTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -73,6 +77,10 @@
     <ProjectReference Include="..\ShoppingCart\ShoppingCart.csproj">
       <Project>{559BF4EA-2FF1-4A93-9747-D4B6C1C6A725}</Project>
       <Name>ShoppingCart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VoucherParser\VoucherParser.csproj">
+      <Project>{0D2F6ECF-99C9-4B91-8D42-7D9483CBE1B8}</Project>
+      <Name>VoucherParser</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
