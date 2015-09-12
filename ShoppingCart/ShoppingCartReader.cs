@@ -9,6 +9,9 @@ using System.Text;
 using Accord.Controls;
 using System.Windows.Forms;
 using System.Drawing.Text;
+using Accord.Imaging.Filters;
+using Accord.Imaging;
+using AForge;
 
 namespace ShoppingCart
 {
@@ -40,6 +43,28 @@ namespace ShoppingCart
 		{			
 			var lines = this.lineSegmentation.Segment (imageRows).ToList ();
 			var readShoppingCart = new List<char> ();
+
+//			var kirsch = new KirschEdgeDetector ();
+//			Bitmap edges = kirsch.Apply (image);
+
+			FastCornersDetector fast = new FastCornersDetector () {
+				Suppress = true, // suppress non-maximum points
+				Threshold = 40   // less leads to more corners
+			};
+
+			// Process the image looking for corners
+			List<IntPoint> points = fast.ProcessImage (image);
+
+			// Create a filter to mark the corners
+			PointsMarker marker = new PointsMarker (points);
+
+			// Apply the corner-marking filter
+			Bitmap markers = marker.Apply (image);
+
+			// Show on the screen
+			ImageBox.Show (markers);
+
+
 
 			using (var g = Graphics.FromImage (this.image)) {
 				foreach (var line in lines) {
