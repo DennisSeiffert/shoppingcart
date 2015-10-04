@@ -46,17 +46,27 @@ namespace ShoppingCart
 		{			
 			var lines = this.lineSegmentation.Segment (imageRows).ToList ();
 
-			var blackPixelPerLine = imageRows.Select (l => new Complex (l.Values.Sum (), 0.0)).ToList ();
-			var len = blackPixelPerLine.Count;
-			var requiredLength = Accord.Math.Tools.NextPowerOf2 (len);
-			if (requiredLength > len) {
-				blackPixelPerLine.AddRange (new Complex[requiredLength - len]);	
-			}
 
-			var fftData = blackPixelPerLine.ToArray ();
-			FourierTransform.FFT (fftData, FourierTransform.Direction.Forward);
-			var powerSpectrum = fftData.Select (f => f.Magnitude).ToList ();
-
+//			int rows = imageRows.Count (), columns = imageRows.First ().Values.Length;
+//			int powerOf2Rows = Accord.Math.Tools.NextPowerOf2 (rows), powerOf2Columns = Accord.Math.Tools.NextPowerOf2 (columns);
+//			var complexImageData = new Complex[powerOf2Rows, powerOf2Columns];
+//			for (int i = 0; i < powerOf2Rows; i++) {
+//				for (int j = 0; j < powerOf2Columns; j++) {
+//					if (i < rows && j < columns) {
+//						complexImageData [i, j] = new Complex (imageRows.ElementAt (i).Values [j], 0.0);	
+//					} else {
+//						complexImageData [i, j] = new Complex ();	
+//					}
+//				}
+//			}
+//			var whitePixelPerLine = imageRows.Select (l => l.Values.Select (v => new Complex (v, 0.0)));
+//			var len = whitePixelPerLine.Count;
+//			var requiredLength = Accord.Math.Tools.NextPowerOf2 (len);
+//			if (requiredLength > len) {
+//				whitePixelPerLine.AddRange (new Complex[requiredLength - len]);	
+//			}
+				
+//			FourierTransform.DFT2 (complexImageData, FourierTransform.Direction.Forward);		
 
 			var readShoppingCart = new List<char> ();
 			//ImageBox.Show (this.image);

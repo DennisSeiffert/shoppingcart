@@ -58,7 +58,7 @@ namespace ShoppingCart
 		{	
 			int blockLeftBorder = 0, blockRightBorder = 0;
 			var blockTopBorder = (line.First () as CarriageReturn) != null ? (line.First () as CarriageReturn).Row + 1 : 0;
-			var blockBottomBorder = (line.Last (l => l is CarriageReturn) as CarriageReturn).Row;
+			var blockBottomBorder = (line.Last (l => l is CarriageReturn) as CarriageReturn).Row;				
 
 			var lineWithoutCarriageReturnMarkers = line.Where (r => !(r is CarriageReturn)).ToList ();
 			int columns = lineWithoutCarriageReturnMarkers.Any () ? lineWithoutCarriageReturnMarkers.First ().Values.Length : 0;

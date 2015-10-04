@@ -66,6 +66,7 @@
     <Compile Include="BlockSegmentationTests.cs" />
     <Compile Include="LetterDatabaseAdapterTests.cs" />
     <Compile Include="VoucherTests.cs" />
+    <Compile Include="LineSegmentationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

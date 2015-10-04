@@ -16,13 +16,18 @@ namespace ShoppingCart
 
 		internal IEnumerable<List<Sample>> Segment (IEnumerable<Sample> imageRows)
 		{
-			var imageDataPerLineWithCarriageReturns = InsertCarriageReturnMarker (imageRows);
+			var imageDataPerLineWithCarriageReturns = InsertCarriageReturnMarker (imageRows).ToList ();
 
 			var line = new List<Sample> ();
 			bool isInline = true;
+			int rowIndex = -1;
 			foreach (var row in imageDataPerLineWithCarriageReturns) {
-				if (row is CarriageReturn && !isInline) {
+				rowIndex++;
+				if (!(row is CarriageReturn) && !isInline) {
 					line = new List<Sample> ();
+					if (rowIndex > 0) {
+						line.Add (imageDataPerLineWithCarriageReturns [rowIndex - 1]);
+					}
 					line.Add (row);
 					isInline = true;
 					continue;
@@ -36,6 +41,9 @@ namespace ShoppingCart
 					isInline = false;
 				}
 			}
+			if (isInline && line.Any ())
+				line.Add (new CarriageReturn (rowIndex));
+			yield return line;
 		}
 
 		private IEnumerable<Sample> InsertCarriageReturnMarker (IEnumerable<Sample> imageDataPerLine)
@@ -55,19 +63,19 @@ namespace ShoppingCart
 				
 			Histogram histogram = new Histogram (intensitiesPerRow.ToArray ());
 			int maxBin = histogram.Values.ToList ().IndexOf (histogram.Values.Max ());
-			double lineThreshold = maxBin > -1 ? (histogram.Bins [maxBin].Range.Max - histogram.Bins [maxBin].Range.Min) * 0.55 + histogram.Bins [maxBin].Range.Min : 0.0;
+			double lineThreshold = maxBin > -1 ? histogram.Bins [maxBin].Range.Max : 0.0;
 			//normally 
 
-			bool insideLine = false;
+			// bool insideLine = false;
 			foreach (var line in imageDataPerLine) {	
 				rowCounter++;
-				if (!insideLine && intensitiesPerRow.ElementAt (rowCounter - 1) > lineThreshold) {										
-					yield return new CarriageReturn (rowCounter - 1);
-					insideLine = true;
-				}
+//				if (!insideLine && intensitiesPerRow.ElementAt (rowCounter - 1) > lineThreshold) {										
+//					yield return new CarriageReturn (rowCounter - 1);
+//					insideLine = true;
+//				}
 				if (intensitiesPerRow.ElementAt (rowCounter - 1) <= lineThreshold) {					
 					yield return new CarriageReturn (rowCounter - 1);
-					insideLine = false;
+					// insideLine = false;
 					continue;
 				}
 				yield return line;					
