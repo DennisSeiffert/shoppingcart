@@ -45,67 +45,7 @@ namespace ShoppingCart
 		public string Read (IEnumerable<Sample> imageRows)
 		{			
 			var lines = this.lineSegmentation.Segment (imageRows).ToList ();
-
-
-//			int rows = imageRows.Count (), columns = imageRows.First ().Values.Length;
-//			int powerOf2Rows = Accord.Math.Tools.NextPowerOf2 (rows), powerOf2Columns = Accord.Math.Tools.NextPowerOf2 (columns);
-//			var complexImageData = new Complex[powerOf2Rows, powerOf2Columns];
-//			for (int i = 0; i < powerOf2Rows; i++) {
-//				for (int j = 0; j < powerOf2Columns; j++) {
-//					if (i < rows && j < columns) {
-//						complexImageData [i, j] = new Complex (imageRows.ElementAt (i).Values [j], 0.0);	
-//					} else {
-//						complexImageData [i, j] = new Complex ();	
-//					}
-//				}
-//			}
-//			var whitePixelPerLine = imageRows.Select (l => l.Values.Select (v => new Complex (v, 0.0)));
-//			var len = whitePixelPerLine.Count;
-//			var requiredLength = Accord.Math.Tools.NextPowerOf2 (len);
-//			if (requiredLength > len) {
-//				whitePixelPerLine.AddRange (new Complex[requiredLength - len]);	
-//			}
-				
-//			FourierTransform.DFT2 (complexImageData, FourierTransform.Direction.Forward);		
-
 			var readShoppingCart = new List<char> ();
-			//ImageBox.Show (this.image);
-//			var kirsch = new KirschEdgeDetector ();
-//			var edges = kirsch.Apply (new UnmanagedImage (image.LockBits (new Rectangle (0, 0, this.image.Width, this.image.Height), 
-//				            System.Drawing.Imaging.ImageLockMode.ReadWrite, this.image.PixelFormat)));
-//			ImageBox.Show (edges);
-
-//			HarrisCornersDetector hcd = new HarrisCornersDetector ();
-//			hcd.Measure = HarrisCornerMeasure.Noble;
-//			// process image searching for corners
-//			IEnumerable<IntPoint> corners = hcd.ProcessImage (image);
-//			// Create a filter to mark the corners
-//			PointsMarker marker = new PointsMarker (corners);
-//			
-//			// Apply the corner-marking filter
-//			Bitmap markers = marker.Apply (image);
-			
-			// Show on the screen
-			//ImageBox.Show (markers);
-
-//			FastCornersDetector fast = new FastCornersDetector () {
-//				Suppress = true, // suppress non-maximum points
-//				Threshold = 40   // less leads to more corners
-//			};
-//
-//			// Process the image looking for corners
-//			List<IntPoint> points = fast.ProcessImage (image);
-//
-//			// Create a filter to mark the corners
-//			PointsMarker marker = new PointsMarker (points);
-//
-//			// Apply the corner-marking filter
-//			Bitmap markers = marker.Apply (image);
-//
-//			// Show on the screen
-//			ImageBox.Show (markers);
-
-
 
 			using (var g = Graphics.FromImage (this.image)) {
 				foreach (var line in lines) {
