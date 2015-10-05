@@ -98,6 +98,7 @@
     <Compile Include="CharacterClassifier.cs" />
     <Compile Include="CharacterBlock.cs" />
     <Compile Include="Voucher.cs" />
+    <Compile Include="SpecialCharacterClassifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Linq;
 
 namespace ShoppingCart
 {
 	public class CharacterClassifier : ICharacterMatching
 	{
-		private ICharacterMatching digitClassifier, letterClassifier;
+		private ICharacterMatching digitClassifier, letterClassifier, specialCharacterClassifier;
 
-		public CharacterClassifier (ICharacterMatching digitClassifier, ICharacterMatching letterClassifier)
+		public CharacterClassifier (ICharacterMatching digitClassifier, ICharacterMatching letterClassifier, 
+		                            ICharacterMatching specialCharacterClassifier)
 		{
+			this.specialCharacterClassifier = specialCharacterClassifier;
 			this.letterClassifier = letterClassifier;
 			this.digitClassifier = digitClassifier;
 		}
@@ -22,20 +25,16 @@ namespace ShoppingCart
 
 
 		char ICharacterMatching.Detect (Sample sample, out double probability)
-		{
-			double digitProb, letterProb;
-			char digit, letter;
-			digit = this.digitClassifier.Detect (sample, out digitProb);
+		{			
+			double[] prob = new double[3];
+			char[] character = new char[3];
+			character [0] = this.digitClassifier.Detect (sample, out prob [0]);
+			character [1] = this.letterClassifier.Detect (sample, out prob [1]);
+			character [2] = this.specialCharacterClassifier.Detect (sample, out prob [2]);
 
-			letter = this.letterClassifier.Detect (sample, out letterProb);
-			if (letterProb > digitProb) {
-				//if (letterProb > 0.0) {
-				probability = letterProb;
-				return letter;
-			}
-
-			probability = digitProb;
-			return digit;
+			var i = prob.ToList ().IndexOf (prob.Max ());
+			probability = prob [i];
+			return character [i];
 		}
 
 		#endregion
