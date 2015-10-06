@@ -26,11 +26,11 @@ namespace ShoppingCart
 
 			var specialCharacterClassifier = new SpecialCharacterClassifier (LetterDatabaseAdapter.Read (@"../resources/optspecialcharacters.tra"));
 
-			foreach (var testSample in OptDigitDatabaseAdapter.Read(@"../resources/optdigits.tes")) {
-				var digit = (digitClassifier as ICharacterMatching).Detect (testSample);
-				Console.Out.WriteLine ("expected result: {0}", testSample.Character);
-				Console.Out.WriteLine ("actual: {0}", digit);
-			}
+//			foreach (var testSample in OptDigitDatabaseAdapter.Read(@"../resources/optdigits.tes")) {
+//				var digit = (digitClassifier as ICharacterMatching).Detect (testSample);
+//				Console.Out.WriteLine ("expected result: {0}", testSample.Character);
+//				Console.Out.WriteLine ("actual: {0}", digit);
+//			}
 
 			var shoppingCartReader = new ShoppingCartReader (new CharacterClassifier (digitClassifier, letterClassifier, specialCharacterClassifier), new NewLineClassifier (), new BlankLineClassifier ());
 			Console.Out.WriteLine (shoppingCartReader.Read (args [0]));

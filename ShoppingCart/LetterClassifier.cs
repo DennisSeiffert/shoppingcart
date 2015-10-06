@@ -11,9 +11,7 @@ namespace ShoppingCart
 		//public const string LETTERS = "ABCDEFGHI";
 		private char[] letters;
 
-		public LetterClassifier (IEnumerable<Sample> samples) : base (samples, 
-			                                                             LETTERS.ToCharArray (),
-			                                                             64, 35, LETTERS.Length)
+		public LetterClassifier (IEnumerable<Sample> samples) : base (samples, LETTERS.ToCharArray (), 0.01, 64, 35, LETTERS.Length)
 		{
 			letters = LETTERS.ToCharArray ();
 		}

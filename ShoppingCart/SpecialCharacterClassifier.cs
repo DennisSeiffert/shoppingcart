@@ -10,9 +10,7 @@ namespace ShoppingCart
 
 		private readonly char[] characters;
 
-		public SpecialCharacterClassifier (IEnumerable<Sample> samples) : base (samples, 
-			                                                                       CHARACTERS.ToCharArray (),
-			                                                                       64, 15, CHARACTERS.Length)
+		public SpecialCharacterClassifier (IEnumerable<Sample> samples) : base (samples, CHARACTERS.ToCharArray (), 0.2, 64, 15, CHARACTERS.Length)
 		{
 			characters = CHARACTERS.ToCharArray ();
 		}

@@ -13,8 +13,11 @@ namespace ShoppingCart
 	{
 		protected ActivationNetwork network;
 
-		public NeuralNetwork (IEnumerable<Sample> samples, char[] trainingSet, int inputsCount, params int[] neuronsCount)
+		double trainingThreshold;
+
+		public NeuralNetwork (IEnumerable<Sample> samples, char[] trainingSet, double trainingThreshold, int inputsCount, params int[] neuronsCount)
 		{
+			this.trainingThreshold = trainingThreshold;
 			this.network = this.InitializeNetwork (inputsCount, neuronsCount);
 			this.Train (trainingSet, samples);
 		}
@@ -36,14 +39,31 @@ namespace ShoppingCart
 		{
 			var learning = new BackPropagationLearning (this.network);
 			var error = double.MaxValue;
+			var maximumError = 0.11;
+			var averageMinimumError = 1.0;
+			var errorsPerCharacter = new Dictionary<char, double> ();
 			var innerSamples = samples.ToList ();
-			while (error > 0.1) {
+			while (averageMinimumError > this.trainingThreshold) {	
+				maximumError = 0.0;
 				foreach (var sample in innerSamples) {				
 					double[] expectedResult = new double[this.network.Layers.Last ().Neurons.Length];
 					expectedResult [trainingSet.ToList ().IndexOf (sample.Character)] = 1.0;
 					error = learning.Run (sample.Values, expectedResult);
-					Console.Out.WriteLine ("Error: {0}", error);
+					maximumError = Math.Max (error, maximumError);
+					//Console.Out.WriteLine ("Error: {0}", error);
+
+					if (!errorsPerCharacter.ContainsKey (sample.Character)) {
+						errorsPerCharacter.Add (sample.Character, error);
+					} else {
+						errorsPerCharacter [sample.Character] = error;
+					}
+
+					averageMinimumError = errorsPerCharacter.Values.Average ();
 				}
+			}
+
+			foreach (var errorPerCharacter in errorsPerCharacter) {
+				Console.Out.WriteLine ("Fehler für '{0}' : {1}", errorPerCharacter.Key, errorPerCharacter.Value);
 			}
 		}
 
