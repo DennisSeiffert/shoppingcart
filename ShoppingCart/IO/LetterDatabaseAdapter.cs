@@ -106,7 +106,7 @@ namespace ShoppingCart.IO
 		{
 			double[,] imageMatrix;
 			new ImageToMatrix ().Convert (imageLetter, out imageMatrix);
-			imageMatrix.ApplyInPlace (v => v > 0.8 ? 1.0 : 0.0);
+			imageMatrix.ApplyInPlace (v => v > 0.82 ? 1.0 : 0.0);
 			return imageMatrix;
 		}
 	}

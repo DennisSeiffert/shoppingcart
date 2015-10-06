@@ -62,7 +62,7 @@ namespace ShoppingCart
 						g.DrawRectangle (new Pen (Color.Red, 1.0f), block.ToRectangle ());	
 
 						var imageMatrix = Matrix.Create<double> (0, block.Width);
-						for (int i = block.Row; i < block.Row + block.Height; i++) {						
+						for (int i = Math.Max (0, block.Row - 5); i < block.Row + block.Height; i++) {						
 							imageMatrix = imageMatrix.InsertRow (imageRows.ElementAt (i).Values.Submatrix (block.Column, block.Column + block.Width - 1));
 						}
 
