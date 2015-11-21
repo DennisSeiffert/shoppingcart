@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Accord.Statistics.Visualizations;
 
@@ -25,10 +24,10 @@ namespace ShoppingCart
 				rowIndex++;
 				if (!(row is CarriageReturn) && !isInline) {
 					line = new List<Sample> ();
-					if (rowIndex > 0) {
-						line.Add (imageDataPerLineWithCarriageReturns [rowIndex - 1]);
+					if (rowIndex > 0) {						
+						line.Add (imageDataPerLineWithCarriageReturns [rowIndex - 1]);						
 					}
-					line.Add (row);
+					line.Add (row);					
 					isInline = true;
 					continue;
 				}

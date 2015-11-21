@@ -43,7 +43,12 @@ namespace ShoppingCart
 		}
 
 		public string Read (IEnumerable<Sample> imageRows)
-		{			
+		{	
+			var imageData = Matrix.Create<double> (0, imageRows.First ().Values.Length);
+			foreach (var item in imageRows) {
+				imageData = imageData.InsertRow (item.Values);
+			}
+
 			var lines = this.lineSegmentation.Segment (imageRows).ToList ();
 			var readShoppingCart = new List<char> ();
 
@@ -59,22 +64,28 @@ namespace ShoppingCart
 						var distance = block.Column - endOfPreviousBlock;
 						readShoppingCart.AddRange (Enumerable.Repeat (' ', (int)Math.Floor (distance / 5.0)));
 						endOfPreviousBlock = block.Column + block.Width;
-						g.DrawRectangle (new Pen (Color.Red, 1.0f), block.ToRectangle ());	
 
-						var imageMatrix = Matrix.Create<double> (0, block.Width);
-						for (int i = Math.Max (0, block.Row - 5); i < block.Row + block.Height; i++) {						
-							imageMatrix = imageMatrix.InsertRow (imageRows.ElementAt (i).Values.Submatrix (block.Column, block.Column + block.Width - 1));
-						}
+						var y_min = Math.Max (0, block.Row - 2);
+						var y_max = Math.Min (block.Row + block.Height + 1, imageData.Rows () - 1);
+						var x_min = Math.Max (0, block.Column - 2);
+						var x_max = Math.Min (block.Column + block.Width + 1, imageData.Columns () - 1);
+						var imageMatrix = imageData.Submatrix (y_min, y_max, x_min, x_max); 						
+						
+						g.DrawRectangle (new Pen (Color.Red, 1.0f), new Rectangle (x_min, y_min, x_max - x_min, y_max - y_min));	
 
 						Bitmap blockImage;
 						new Accord.Imaging.Converters.MatrixToImage ().Convert (imageMatrix, out blockImage);
-						//					ImageBox.Show (blockImage);
+
 						imageMatrix = LetterDatabaseAdapter.NormalizeBitmap (blockImage);
 
 						if (imageMatrix.Length > 0) {										
 							var intensityBlock = Sample.FromIntensityDistribution (imageMatrix);
 
-							char digit = this.characterClassifier.Detect (intensityBlock);
+							double prob = 0.0;
+							char digit = this.characterClassifier.Detect (intensityBlock, out prob);
+							if (prob < 0.5) {
+								//ImageBox.Show (blockImage);
+							}
 
 							g.DrawString (new string (digit, 1), new Font ("Arial", 12), Brushes.Blue, block.Column, Math.Max (block.Row - 15, 0));
 

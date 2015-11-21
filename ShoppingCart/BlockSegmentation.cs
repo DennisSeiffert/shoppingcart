@@ -18,7 +18,7 @@ namespace ShoppingCart
 		}
 
 		public IList<CharacterBlock> MergeNeighboredBlocks (IList<CharacterBlock> blocks)
-		{
+		{			
 			for (int i = 1; i < blocks.Count; i++) {
 				var current = blocks [i];
 				var previous = blocks [i - 1];

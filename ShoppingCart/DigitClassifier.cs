@@ -14,7 +14,7 @@ namespace ShoppingCart
 		public const string DIGITS = "0123456789";
 		private char[] digits = DIGITS.ToCharArray ();
 
-		public DigitClassifier (IEnumerable<Sample> samples) : base (samples, DIGITS.ToCharArray (), 0.01, 64, 15, DIGITS.Length)
+		public DigitClassifier (IEnumerable<Sample> samples) : base (samples, DIGITS.ToCharArray (), 0.001, 64, 15, DIGITS.Length)
 		{
 		}
 
@@ -35,9 +35,11 @@ namespace ShoppingCart
 		{
 			var result = this.network.Compute (sample.Values);
 			probability = result.Max ();
-			//			if (maxProbability < 0.2) {
-			//				return ' ';
-			//			}
+
+			if (probability < 0.8) {
+				probability = 0.0;
+				return ' ';
+			}
 
 			var indexOfRecognizedDigit = result.ToList ().IndexOf (probability);
 			return digits [indexOfRecognizedDigit];		

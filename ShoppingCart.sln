@@ -9,6 +9,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoucherParser", "VoucherPar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoucherParserTests", "VoucherParserTests\VoucherParserTests.csproj", "{4F9BCAF3-4331-4012-A80D-BE0F2D94A7EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caffe", "Caffe\Caffe.csproj", "{2D57284C-622C-45EA-A267-99454DA9F43A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C173E0DD-5135-41E5-B4BB-3A1A9DB655A2}"
+	ProjectSection(SolutionItems) = preProject
+		packages\caffe\libcaffe.so = packages\caffe\libcaffe.so
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaffeTests", "CaffeTests\CaffeTests.csproj", "{8A49C7EE-E828-4B41-94C2-B745B6B01BEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +28,10 @@ Global
 		{0D2F6ECF-99C9-4B91-8D42-7D9483CBE1B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D2F6ECF-99C9-4B91-8D42-7D9483CBE1B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D2F6ECF-99C9-4B91-8D42-7D9483CBE1B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D57284C-622C-45EA-A267-99454DA9F43A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D57284C-622C-45EA-A267-99454DA9F43A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D57284C-622C-45EA-A267-99454DA9F43A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D57284C-622C-45EA-A267-99454DA9F43A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{325A13E6-E9ED-49EB-A8D2-3CA5466CAAAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{325A13E6-E9ED-49EB-A8D2-3CA5466CAAAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{325A13E6-E9ED-49EB-A8D2-3CA5466CAAAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -31,6 +44,12 @@ Global
 		{559BF4EA-2FF1-4A93-9747-D4B6C1C6A725}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{559BF4EA-2FF1-4A93-9747-D4B6C1C6A725}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{559BF4EA-2FF1-4A93-9747-D4B6C1C6A725}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A49C7EE-E828-4B41-94C2-B745B6B01BEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A49C7EE-E828-4B41-94C2-B745B6B01BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A49C7EE-E828-4B41-94C2-B745B6B01BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A49C7EE-E828-4B41-94C2-B745B6B01BEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

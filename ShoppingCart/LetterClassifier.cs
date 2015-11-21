@@ -11,7 +11,7 @@ namespace ShoppingCart
 		//public const string LETTERS = "ABCDEFGHI";
 		private char[] letters;
 
-		public LetterClassifier (IEnumerable<Sample> samples) : base (samples, LETTERS.ToCharArray (), 0.01, 64, 35, LETTERS.Length)
+		public LetterClassifier (IEnumerable<Sample> samples) : base (samples, LETTERS.ToCharArray (), 0.001, 64, 35, LETTERS.Length)
 		{
 			letters = LETTERS.ToCharArray ();
 		}
@@ -30,6 +30,10 @@ namespace ShoppingCart
 			var result = this.network.Compute (sample.Values);
 			probability = result.Max ();
 
+//			if (probability < 0.8) {
+//				probability = 0.0;
+//				return ' ';
+//			}
 			var recognizedDigit = result.ToList ().IndexOf (probability);
 			return this.letters [recognizedDigit];
 		}

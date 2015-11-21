@@ -29,8 +29,13 @@ namespace ShoppingCart
 			double[] prob = new double[3];
 			char[] character = new char[3];
 			character [0] = this.digitClassifier.Detect (sample, out prob [0]);
+			prob [0] = 0.0;
 			character [1] = this.letterClassifier.Detect (sample, out prob [1]);
-			character [2] = this.specialCharacterClassifier.Detect (sample, out prob [2]);
+			if (sample.MaybeSpecialCharacter) {				
+				prob [0] = 0.0;
+				prob [1] = 0.0;
+				character [2] = this.specialCharacterClassifier.Detect (sample, out prob [2]);
+			}				
 
 			var i = prob.ToList ().IndexOf (prob.Max ());
 			probability = prob [i];

@@ -17,7 +17,7 @@ namespace ShoppingCart
 		char ICharacterMatching.Detect (Sample sample, out double probability)
 		{
 			var sum = sample.Values.Sum ();
-			if (sum / sample.Values.Length > 0.95) {
+			if (sum / sample.Values.Length > 0.98) {
 				probability = 1.0;
 				return '|';
 			}

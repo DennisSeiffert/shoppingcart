@@ -31,6 +31,8 @@ namespace ShoppingCart
 
 		public char Character { get; private set; }
 
+		public bool MaybeSpecialCharacter { get; set; }
+
 		void Normalize ()
 		{			
 			if (this.maxValue > 0.0) {
@@ -53,10 +55,11 @@ namespace ShoppingCart
 
 			double[] characterIntensityDistribution = new double[64];
 			int quadrant = 0;
-			double maxValue = 0;
+			double maxValue = 0, sumOfActivatedPixels = 0.0;
 			int width = 32;
 			int height = 32;
 			int segmentationWindowWidth = 4, segmentationWindowHeight = 4;
+			bool maybeSpecialCharacter = false;
 
 			for (int stepY = 0; stepY < height; stepY += segmentationWindowHeight) {
 				for (int stepX = 0; stepX < width; stepX += segmentationWindowWidth) {
@@ -67,10 +70,12 @@ namespace ShoppingCart
 					subMatrix.Apply (e => activatedPixels += 1.0 - e);
 					characterIntensityDistribution [quadrant] = activatedPixels;
 					maxValue = Math.Max (maxValue, activatedPixels);
+					sumOfActivatedPixels += activatedPixels;
 					quadrant++;
 				}
+				maybeSpecialCharacter = stepY == 12 && sumOfActivatedPixels == 0;
 			}
-			return new Sample (characterIntensityDistribution, ' ', maxValue);
+			return new Sample (characterIntensityDistribution, ' ', maxValue) { MaybeSpecialCharacter = maybeSpecialCharacter };
 		}
 	}
 }

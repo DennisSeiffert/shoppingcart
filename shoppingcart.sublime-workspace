@@ -1,0 +1,297 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "ShoppingCart/LineSegmentation.cs",
+			"settings":
+			{
+				"buffer_size": 2216,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "caffeapiwrapper/wrapper.cs",
+			"settings":
+			{
+				"buffer_size": 221,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Makefile/Make.sublime-build",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 96.0,
+		"last_filter": "Msbuild",
+		"selected_items":
+		[
+			[
+				"Msbuild",
+				"Set Syntax: MSBuild"
+			],
+			[
+				"Package Control: ",
+				"Package Control: List Packages"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 361.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/commondata/Programming/Repositories/shoppingcart",
+		"/commondata/Programming/Repositories/shoppingcart/caffeapiwrapper",
+		"/commondata/Programming/Repositories/shoppingcart/packages"
+	],
+	"file_history":
+	[
+		"/commondata/Programming/Repositories/shoppingcart/caffeapiwrapper/caffeapiwrapper.csproj",
+		"/commondata/Programming/Repositories/shoppingcart/caffeapiwrapper/src/wrapper.cs",
+		"/commondata/Programming/Repositories/shoppingcart/ShoppingCart/ShoppingCart.csproj",
+		"/commondata/Programming/Repositories/shoppingcart/shoppingcart.sublime-project",
+		"/commondata/Programming/Repositories/shoppingcart/caffeapiwrapper/caffeapiwrapper.sublime-project",
+		"/commondata/Programming/Repositories/shoppingcart/caffeapiwrapper/wrapper.cs",
+		"/commondata/Programming/Repositories/shoppingcart/caffeapiwrapper/newclass.cs",
+		"/home/dennis/.config/sublime-text-3/Packages/User/C#.sublime-settings",
+		"/home/dennis/.config/sublime-text-3/Packages/User/Default.sublime-keymap",
+		"/home/dennis/.config/sublime-text-3/Packages/User/OmniSharpSublime.sublime-settings",
+		"/commondata/Programming/Repositories/shoppingcart/caffeapiwrapper/caffeapiwrapper.cs",
+		"/home/dennis/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/commondata/Programming/Repositories/shoppingcart/ShoppingCart/Properties/AssemblyInfo.cs",
+		"/home/dennis/.config/sublime-text-3/Packages/User/JSON.sublime-settings",
+		"/commondata/Programming/Repositories/monodevelop/monodevelop.sublime-project",
+		"/commondata/Programming/Repositories/monodevelop/main/src/addins/MonoDevelop.Debugger/MonoDevelop.Debugger/BreakpointPad.cs",
+		"/commondata/Programming/Repositories/monodevelop/main/external/debugger-libs/Mono.Debugging/Mono.Debugging.Client/BreakEvent.cs",
+		"/commondata/Programming/Repositories/monodevelop/main/external/debugger-libs/Mono.Debugging/Mono.Debugging.Client/TargetEventArgs.cs",
+		"/commondata/Programming/Repositories/monodevelop/main/src/addins/MonoDevelop.Debugger/MonoDevelop.Debugger/BusyEvaluatorDialog.cs",
+		"/commondata/Programming/Repositories/monodevelop/main/src/addins/MonoDevelop.Debugger/MonoDevelop.Debugger/DebuggingService.cs",
+		"/commondata/Programming/Repositories/monodevelop/main/src/core/MonoDevelop.Core/MonoDevelop.Core.Collections/Set.cs",
+		"/commondata/Programming/Repositories/monodevelop/main/external/ikvm/reflect/IKVM.Reflection.csproj",
+		"/commondata/Programming/Repositories/monodevelop/main/external/debugger-libs/Mono.Debugging/Mono.Debugging.Client/BreakEventInfo.cs"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/commondata/Programming/Repositories/shoppingcart/caffeapiwrapper",
+			"/commondata/Programming/Repositories/monodevelop/main/external/nuget-binary"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"*csproj",
+			"*dll"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "ShoppingCart/LineSegmentation.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2216,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"oops":
+							{
+								"1321,1337": "Parameter can be IEnumerable",
+								"1439,1455": "Possible multiple enumeration of IEnumerable",
+								"1729,1738": "Use 'var' keyword",
+								"1980,1996": "Possible multiple enumeration of IEnumerable",
+								"2055,2056": "Use of Linq method when there's a better alternative",
+								"389,398": "Parameter can be IEnumerable"
+							},
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "caffeapiwrapper/wrapper.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 221,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								221,
+								221
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 329.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.variable_get":
+	{
+		"height": 297.0
+	},
+	"pinned_build_system": "",
+	"project": "shoppingcart.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 422.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
