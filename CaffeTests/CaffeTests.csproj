@@ -38,11 +38,14 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CaffeTest.cs" />
+    <Compile Include="CaffeTest.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="trainedNet.nettra" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Caffe\Caffe.csproj">

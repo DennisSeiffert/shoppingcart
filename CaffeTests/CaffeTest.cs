@@ -4,27 +4,26 @@ using Caffe;
 using Should;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
+using System.IO;
 
 namespace CaffeTests
 {
 	[TestFixture ()]
 	public class CaffeTest
 	{
-		string trainingsAndTestNetWithSolverDefinition = 
-			@"test_iter: 100 
-			test_interval: 500 
-			base_lr: 0.01 
-			momentum: 0.9 
-			weight_decay: 0.0005 
-			lr_policy: 'inv' 
-			gamma: 0.0001 
-			power: 0.75 
-			display: 5 
-			max_iter: 100 
-			snapshot: 1000 
-			snapshot_prefix: 'character' 
-			net_param { 
-			name: 'TestNetwork'
+		string netDefinition = @"
+					name: 'TestNetwork'
+	state {
+	  phase: TEST 
+	}
+	input: 'data'
+	input_shape { 
+	  dim: 10 
+	  dim: 3 
+	  dim: 32 
+	  dim: 32 
+	} 
 			layer { 
 			  name: 'data'  
 			  type: 'ImageData'  
@@ -45,28 +44,7 @@ namespace CaffeTests
 			    new_width: 32  
 			    root_folder: '/home/dennis/PycharmProjects/untitled/'  
 			  }  
-			}  
-			layer { 
-			  name: 'data'  
-			  type: 'ImageData'  
-			  top: 'data'  
-			  top: 'label'  
-			  include {  
-			    phase: TEST  
-			  }  
-			  transform_param {  
-			    scale: 0.00392156862745  
-			    mirror: true  
-			    crop_size: 32  
-			  }  
-			  image_data_param {  
-			    source: '/home/dennis/PycharmProjects/untitled/images.txt'  
-			    batch_size: 1  
-			    new_height: 32  
-			    new_width: 32  
-			    root_folder: '/home/dennis/PycharmProjects/untitled/'  
-			  }  
-			}  
+			}  		
 			layer {  
 			  name: 'conv1'  
 			  type: 'Convolution' 
@@ -151,8 +129,36 @@ namespace CaffeTests
 			  bottom: 'ip2' 
 			  bottom: 'label' 
 			  top: 'loss' 
+			  include {  
+			    phase: TRAIN  
+			  }  
 			}
-			}";
+			layer { 
+			  name: 'prob' 
+			  type: 'Softmax' 
+			  bottom: 'ip2' 			  
+			  top: 'prob' 
+			  include {  
+			    phase: TEST  
+			  }  
+			}
+";
+		string trainingsAndTestNetWithSolverDefinition = 
+			@"test_iter: 100 
+			test_interval: 500 
+			base_lr: 0.01 
+			momentum: 0.9 
+			weight_decay: 0.0005 
+			lr_policy: 'inv' 
+			gamma: 0.0001 
+			power: 0.75 
+			display: 5 
+			max_iter: 100 
+			snapshot: 1000 
+			snapshot_prefix: 'character' 
+			net_param {{ 
+			{0}
+			}}";
 
 		[Test ()]
 		public void ShouldBeAbleToCreateTrainingInstance ()
@@ -161,7 +167,9 @@ namespace CaffeTests
 
 			instance.ShouldNotEqual (IntPtr.Zero);
 
-			var trainedNetAsString = Wrapper.Train (instance, trainingsAndTestNetWithSolverDefinition);
+			var net = string.Format (trainingsAndTestNetWithSolverDefinition, netDefinition);
+
+			var trainedNetAsString = Wrapper.Train (instance, net);
 
 			Wrapper.ReleaseInstance (ref instance);
 
@@ -172,10 +180,16 @@ namespace CaffeTests
 		[Test ()]
 		public void ShouldBeAbleToCreateTestInstance ()
 		{
-			var instance = Wrapper.CreateClassifyingInstance ("Hello", "from", "C#", 
-				               new List<string> (){ "first", "second" }.ToArray (), 2);
+			var trainedNet = File.ReadAllText ("trainedNet.nettra");
+
+			const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			var letters = LETTERS.ToCharArray ().Select (l => l.ToString ()).ToArray ();
+			var instance = Wrapper.CreateClassifyingInstance (netDefinition, trainedNet, "C#", letters, 62);
 
 			instance.ShouldNotEqual (IntPtr.Zero);
+
+			string[] result = new string[5];
+			Wrapper.Classify (instance, "/home/dennis/PycharmProjects/untitled/arial-f.jpg", 5, ref result);
 
 			Wrapper.ReleaseInstance (ref instance);
 
