@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using System.IO;
+using System.Text;
+using System.Runtime.InteropServices;
 
 namespace CaffeTests
 {
@@ -188,8 +190,17 @@ namespace CaffeTests
 
 			instance.ShouldNotEqual (IntPtr.Zero);
 
-			string[] result = new string[5];
-			Wrapper.Classify (instance, "/home/dennis/PycharmProjects/untitled/arial-f.jpg", 5, ref result);
+			var results = new List<string> ();
+			unsafe {
+				IntPtr[] result = new IntPtr[5];
+				Wrapper.Classify (instance, "/home/dennis/PycharmProjects/untitled/arial-f.jpg", result, 5);	
+
+				foreach (var r in result) {
+					results.Add (Marshal.PtrToStringAuto (r));
+				}
+			}
+
+			results.First ().ShouldEqual ("f");
 
 			Wrapper.ReleaseInstance (ref instance);
 
