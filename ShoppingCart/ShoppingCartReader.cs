@@ -76,13 +76,13 @@ namespace ShoppingCart
 						Bitmap blockImage;
 						new Accord.Imaging.Converters.MatrixToImage ().Convert (imageMatrix, out blockImage);
 
-						imageMatrix = LetterDatabaseAdapter.NormalizeBitmap (blockImage);
+						imageMatrix = LetterDatabaseAdapter.NormalizeBitmap (blockImage);												
 
 						if (imageMatrix.Length > 0) {										
-							var intensityBlock = Sample.FromIntensityDistribution (imageMatrix);
+							// var intensityBlock = Sample.FromIntensityDistribution (imageMatrix);
 
 							double prob = 0.0;
-							char digit = this.characterClassifier.Detect (intensityBlock, out prob);
+							char digit = this.characterClassifier.Detect (Sample.From2dMatrix(imageMatrix), out prob);
 							if (prob < 0.5) {
 								//ImageBox.Show (blockImage);
 							}

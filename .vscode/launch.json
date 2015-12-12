@@ -1,0 +1,22 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Debug ShoppingCart",
+			"type": "mono",
+			"request": "launch",
+			"program": "bin/ShoppingCart.exe",
+			"args": ["/commondata/Pictures/KameraUploads/2014-03-10 09.44.39.jpg"],
+			"cwd": ".",
+			"runtimeExecutable": null,
+			"env": {}
+		},
+		{
+			"name": "Attach",
+			"type": "mono",
+			"request": "attach",
+			"address": "localhost",
+			"port": 5858
+		}
+	]
+}

@@ -85,6 +85,28 @@ namespace ShoppingCartTests
 
 			File.WriteAllText ("optspecialcharacters.tra", result);
 		}
+		
+		
+		[Test]
+		public void ShouldCreateLetterTestImages ()
+		{			
+			InstalledFontCollection fontFamilies = new InstalledFontCollection ();
+			var fonts = fontFamilies.Families.Select (fF => new Font (
+				            fF,
+				            24,
+				            FontStyle.Regular,
+				            GraphicsUnit.Pixel)).ToArray ();
+			string specialCharacters = SpecialCharacterClassifier.CHARACTERS;
+			var result = LetterDatabaseAdapter.Write (specialCharacters.ToCharArray (), fonts.Where (f => new [] {
+				"Arial",
+				"Arial Black",
+				"Verdana",
+				"Courier New",
+				"Georgia"
+			}.Contains (f.FontFamily.Name)), "TestImages");
+
+			result.ShouldNotBeEmpty ();
+		}
 	}
 }
 

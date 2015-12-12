@@ -24,6 +24,10 @@ namespace Caffe
 		public static extern string Train (IntPtr pCaffeApiInstance, string solverDefinitionWithNet);
 
 		[DllImport ("caffe.so")]
-		public static extern void Classify (IntPtr pCaffeApiInstance, string file, IntPtr[] results, int N);
+		public static extern void Classify (IntPtr pCaffeApiInstance, double[] imageData, int height, int width, IntPtr[] results, int N);
+		
+		
+		[DllImport ("caffe.so")]
+		public static extern void Classify (IntPtr pCaffeApiInstance, string filename, IntPtr[] results, int N);
 	}
 }

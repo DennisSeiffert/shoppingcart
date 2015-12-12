@@ -1,15 +1,9 @@
-﻿using System;
-using AForge.Neuro;
-using Accord.Neuro;
-using AForge.Neuro.Learning;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Accord.Controls;
-using System.Windows.Forms;
 
 namespace ShoppingCart
 {
-	public class DigitClassifier : NeuralNetwork, ICharacterMatching
+    public class DigitClassifier : NeuralNetwork, ICharacterMatching
 	{
 		public const string DIGITS = "0123456789";
 		private char[] digits = DIGITS.ToCharArray ();

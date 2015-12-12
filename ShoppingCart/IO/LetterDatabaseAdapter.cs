@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Accord.Imaging.Converters;
-using Accord.IO;
 using System.Text;
-using Accord.Controls;
 using Accord.Math;
 using Accord.Imaging;
 using System.IO;
@@ -13,7 +11,7 @@ using AForge.Imaging.Filters;
 
 namespace ShoppingCart.IO
 {
-	public class LetterDatabaseAdapter
+    public class LetterDatabaseAdapter
 	{
 		public LetterDatabaseAdapter ()
 		{
@@ -80,6 +78,25 @@ namespace ShoppingCart.IO
 			}
 
 			return csv.ToString ();
+		}
+		
+				public static IEnumerable<string> Write (IEnumerable<char> letters, IEnumerable<Font> fonts, string path)
+		{
+			var filenames = new List<string> ();
+			foreach (var font in fonts) {
+				foreach (var letter in letters) {
+					Bitmap imageLetter = new Bitmap (32, 32, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+					using (var g = Graphics.FromImage (imageLetter)) {
+						g.FillRectangle (Brushes.White, new Rectangle (new Point (0, 0), imageLetter.Size));
+						g.DrawString (letter.ToString (), font, Brushes.Black, 0, 0);						
+					}
+					var filename = Path.Combine(path, string.Format("{0}_{1}.jpg", letter, font.Name));
+					imageLetter.Save(filename);
+					filenames.Add(filename);
+				}
+			}
+
+			return filenames;
 		}
 
 		private static double[,] Trim (double[,] imageMatrix)

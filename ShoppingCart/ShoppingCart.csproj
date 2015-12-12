@@ -99,6 +99,7 @@
     <Compile Include="CharacterBlock.cs" />
     <Compile Include="Voucher.cs" />
     <Compile Include="SpecialCharacterClassifier.cs" />
+    <Compile Include="DeepNeuralNetwork.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -127,5 +128,14 @@
       <Project>{0D2F6ECF-99C9-4B91-8D42-7D9483CBE1B8}</Project>
       <Name>VoucherParser</Name>
     </ProjectReference>
+        <ProjectReference Include="..\Caffe\Caffe.csproj">
+      <Project>{2D57284C-622C-45EA-A267-99454DA9F43A}</Project>
+      <Name>VoucherParser</Name>
+    </ProjectReference>
+  </ItemGroup>
+    <ItemGroup>
+    <None Include="trainedNet.nettra">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>    
   </ItemGroup>
 </Project>
