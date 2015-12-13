@@ -17,6 +17,12 @@
 			"request": "attach",
 			"address": "localhost",
 			"port": 5858
+		},
+		{
+			"name": "Debug Tests",
+			"type": "mono",
+			"request": "launch",
+			"program": "bin/CaffeTests.dll"			
 		}
 	]
 }

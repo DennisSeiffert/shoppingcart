@@ -40,11 +40,11 @@ namespace CaffeTests
 			    crop_size: 32  
 			  }  
 			  image_data_param {  
-			    source: '/home/dennis/PycharmProjects/untitled/images.txt'  
+			    source: '/home/dennis/PycharmProjects/untitled/CharacterRepository/images.txt'  
 			    batch_size: 20  
 			    new_height: 32  
 			    new_width: 32  
-			    root_folder: '/home/dennis/PycharmProjects/untitled/'  
+			    root_folder: '/home/dennis/PycharmProjects/untitled/CharacterRepository/'  
 			  }  
 			}  		
 			layer {  
