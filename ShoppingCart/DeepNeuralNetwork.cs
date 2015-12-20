@@ -13,13 +13,13 @@ namespace ShoppingCart
         private IntPtr instance;
         string netDefinition = @"
 					name: 'TestNetwork'
-	state {
+	state {    
 	  phase: TEST 
 	}
 	input: 'data'
 	input_shape { 
 	  dim: 10 
-	  dim: 3 
+	  dim: 1 
 	  dim: 32 
 	  dim: 32 
 	} 
@@ -171,7 +171,7 @@ namespace ShoppingCart
             this.trainedNet = Wrapper.Train(instance, this.JoinSolverWithNetDefinition());
         }
 
-        private IEnumerable<string> Classify(int[] image, int height, int width)
+        private IEnumerable<string> Classify(byte[] image, int height, int width)
         {           
             var results = new List<string>();
             
@@ -209,7 +209,7 @@ namespace ShoppingCart
 
         public char Detect(Sample sample, out double probability)
         {
-            var results = this.Classify(sample.Values.Select(d => (int)d).ToArray(), sample.Height, sample.Width);
+            var results = this.Classify(sample.Values.Select(d => (byte)d).ToArray(), sample.Height, sample.Width);
             probability = 1.0;
             return results.First().ToCharArray().First();
         }

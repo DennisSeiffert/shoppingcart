@@ -22,7 +22,7 @@
 			"name": "Debug Tests",
 			"type": "mono",
 			"request": "launch",
-			"program": "bin/CaffeTests.dll"			
+			"program": "CaffeTests/bin/Debug/CaffeTests.dll"			
 		}
 	]
 }

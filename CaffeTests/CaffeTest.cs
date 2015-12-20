@@ -193,7 +193,8 @@ namespace CaffeTests
 			var results = new List<string> ();
 			unsafe {
 				IntPtr[] result = new IntPtr[5];
-				Wrapper.Classify (instance, "/home/dennis/PycharmProjects/untitled/arial-f.jpg", result, 5);	
+				IntPtr[] probs = new IntPtr[5];
+				Wrapper.ClassifyByFilename (instance, "/home/dennis/PycharmProjects/untitled/CharactarRepository/arial-70.jpg", result, probs, 5);	
 
 				foreach (var r in result) {
 					results.Add (Marshal.PtrToStringAuto (r));
