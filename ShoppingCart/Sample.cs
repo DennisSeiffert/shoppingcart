@@ -54,7 +54,7 @@ namespace ShoppingCart
             {
                 for (int j = 0; j < width; j++)
                 {
-					data[i * height + j] = matrix[i,j];
+					data[i * width + j] = matrix[i,j];
                 }
             }
 

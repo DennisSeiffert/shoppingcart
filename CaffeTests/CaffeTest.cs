@@ -22,7 +22,7 @@ namespace CaffeTests
 	input: 'data'
 	input_shape { 
 	  dim: 10 
-	  dim: 3 
+	  dim: 1 
 	  dim: 32 
 	  dim: 32 
 	} 

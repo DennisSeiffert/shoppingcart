@@ -6,9 +6,11 @@ namespace ShoppingCart
     using System.Runtime.InteropServices;
     using Caffe;
 
-    public class DeepNeuralNetwork : ICharacterMatching    
+    public class DeepNeuralNetwork : ICharacterMatching, IDisposable    
     {
-        string trainedNet;
+        string trainedNet;                
+        private bool disposedValue = false; // To detect redundant calls
+        private IntPtr instance;
         string netDefinition = @"
 					name: 'TestNetwork'
 	state {
@@ -114,7 +116,7 @@ namespace ShoppingCart
 			  bottom: 'ip1' 
 			  top: 'ip2' 
 			  inner_product_param { 
-			    num_output: 62 
+			    num_output: 86 
 			    weight_filler { 
 			      type: 'xavier' 
 			    } 
@@ -146,20 +148,20 @@ namespace ShoppingCart
 			base_lr: 0.01 
 			momentum: 0.9 
 			weight_decay: 0.0005 
-			lr_policy: 'inv' 
+			lr_policy: inv 
 			gamma: 0.0001 
 			power: 0.75 
 			display: 5 
 			max_iter: 100 
 			snapshot: 1000 
-			snapshot_prefix: 'character' 
+			snapshot_prefix: character 
 			net_param {{ 
 			{0}
 			}}";
 
         public DeepNeuralNetwork(string trainedNet)
         {
-            this.trainedNet = trainedNet;
+            this.trainedNet = trainedNet;                      
         }
 
         public void Train()
@@ -169,24 +171,27 @@ namespace ShoppingCart
             this.trainedNet = Wrapper.Train(instance, this.JoinSolverWithNetDefinition());
         }
 
-        private IEnumerable<string> Classify(double[] image, int height, int width)
-        {
-            const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var letters = LETTERS.ToCharArray().Select(l => l.ToString()).ToArray();
-            var instance = Wrapper.CreateClassifyingInstance(netDefinition, trainedNet, "C#", letters, 62);
-
+        private IEnumerable<string> Classify(int[] image, int height, int width)
+        {           
             var results = new List<string>();
+            
+            if(this.instance == IntPtr.Zero){
+              const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,.-#+ß;:_*~?=)(/&%$§\"!@€";
+              var letters = LETTERS.ToCharArray().Select(l => l.ToString()).ToArray();            
+              this.instance = Wrapper.CreateClassifyingInstance(netDefinition, trainedNet, "C#", letters, 86);
+            }  
+            
             unsafe
             {
                 IntPtr[] result = new IntPtr[5];
-                Wrapper.Classify(instance, image, height, width, result, 5);
+                IntPtr[] probabilities = new IntPtr[5];
+                Wrapper.Classify(this.instance, image, height, width, result, probabilities, 5);
 
                 foreach (var r in result)
                 {
                     results.Add(Marshal.PtrToStringAuto(r));
                 }
-            }
-            Wrapper.ReleaseInstance(ref instance);
+            }       
 			
 			return results;
         }
@@ -204,10 +209,44 @@ namespace ShoppingCart
 
         public char Detect(Sample sample, out double probability)
         {
-            var results = this.Classify(sample.Values, 32, 32);
+            var results = this.Classify(sample.Values.Select(d => (int)d).ToArray(), sample.Height, sample.Width);
             probability = 1.0;
             return results.First().ToCharArray().First();
         }
+
+       #region IDisposable Support
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+if(this.instance != IntPtr.Zero){
+  Wrapper.ReleaseInstance(ref this.instance);
+}                
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        ~DeepNeuralNetwork() {
+          // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+          Dispose(false);
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        void IDisposable.Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 
 }
