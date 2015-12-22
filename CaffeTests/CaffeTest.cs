@@ -184,7 +184,7 @@ namespace CaffeTests
 		{
 			var trainedNet = File.ReadAllText ("trainedNet.nettra");
 
-			const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,.-#+ß;:_*~?=)(/&%$§\"!@€";
 			var letters = LETTERS.ToCharArray ().Select (l => l.ToString ()).ToArray ();
 			var instance = Wrapper.CreateClassifyingInstance (netDefinition, trainedNet, "C#", letters, 62);
 

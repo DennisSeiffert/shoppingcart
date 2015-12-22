@@ -8,6 +8,7 @@ namespace ShoppingCart
 
     public class DeepNeuralNetwork : ICharacterMatching, IDisposable    
     {
+      public const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,.-#+ß;:_*~?=)(/&%$§\"!@€";
         string trainedNet;                
         private bool disposedValue = false; // To detect redundant calls
         private IntPtr instance;
@@ -175,8 +176,7 @@ namespace ShoppingCart
         {           
             var results = new List<string>();
             
-            if(this.instance == IntPtr.Zero){
-              const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,.-#+ß;:_*~?=)(/&%$§\"!@€";
+            if(this.instance == IntPtr.Zero){              
               var letters = LETTERS.ToCharArray().Select(l => l.ToString()).ToArray();            
               this.instance = Wrapper.CreateClassifyingInstance(netDefinition, trainedNet, "C#", letters, 86);
             }  

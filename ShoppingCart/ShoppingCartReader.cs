@@ -75,7 +75,7 @@ namespace ShoppingCart
                         var characterImageToClassify = imageMatrix.Submatrix(y_min, y_max, x_min, x_max); 
                          Bitmap blockImage;
                          new Accord.Imaging.Converters.MatrixToImage().Convert(characterImageToClassify, out blockImage);
-                        // ImageBox.Show (blockImage);
+                         //ImageBox.Show (blockImage);
                                                										
                         if (characterImageToClassify.Length > 0)
                         {                            
