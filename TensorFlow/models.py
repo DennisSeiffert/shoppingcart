@@ -3,6 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 import tensorflow as tf
+import numpy
 
 
 def inference(data,
@@ -84,3 +85,11 @@ def training(loss, batch_size, train_size,
 
 def evaluation(logits):
     return tf.nn.softmax(logits)
+
+
+def error_rate(predictions, labels):
+    """Return the error rate based on dense predictions and 1-hot labels."""
+    return 100.0 - (
+        100.0 *
+        numpy.sum(numpy.argmax(predictions, 1) == numpy.argmax(labels, 1)) /
+        predictions.shape[0])

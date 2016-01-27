@@ -29,6 +29,7 @@ from PIL import Image
 from tensorflow.python.platform import gfile
 
 import tensorflow as tf
+import models
 
 IMAGE_SIZE = 28
 NUM_CHANNELS = 1
@@ -64,20 +65,49 @@ def create_graph():
 def main(argv=None):  # pylint: disable=unused-argument
     # Extract it into numpy arrays.
     image_data = extract_data("B_testImage.jpg")
-    create_graph()
-    with tf.Session() as sess:
-            # Some useful tensors:
-            # 'softmax:0': A tensor containing the normalized prediction across
-            #   1000 labels.
-            # 'pool_3:0': A tensor containing the next-to-last layer containing 2048
-            #   float description of the image.
-            # 'DecodeJpeg/contents:0': A tensor containing a string providing JPEG
-            #   encoding of the image.
-            # Runs the softmax tensor by feeding the image_data as input to the graph.
-            softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
-            predictions = sess.run(softmax_tensor,
-                           {'DecodeJpeg/contents:0': image_data})
 
+    ######################################################
+    eval_data = tf.placeholder(
+            tf.float32,
+            shape=(1, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
+            name="test_data_input")
+
+    # The variables below hold all the trainable weights. They are passed an
+    # initial value which will be assigned when when we call:
+    # {tf.initialize_all_variables().run()}
+    conv1_weights = tf.Variable(
+            tf.truncated_normal([5, 5, NUM_CHANNELS, 32],  # 5x5 filter, depth 32.
+                                stddev=0.1,
+                                seed=SEED,
+                                name="conv1_weights"))
+    conv1_biases = tf.Variable(tf.zeros([32]), name="conv1_biases")
+    conv2_weights = tf.Variable(
+            tf.truncated_normal([5, 5, 32, 64],
+                                stddev=0.1,
+                                seed=SEED))
+    conv2_biases = tf.Variable(tf.constant(0.1, shape=[64]))
+    fc1_weights = tf.Variable(  # fully connected, depth 512.
+            tf.truncated_normal(
+                    [IMAGE_SIZE // 4 * IMAGE_SIZE // 4 * 64, 512],
+                    stddev=0.1,
+                    seed=SEED))
+    fc1_biases = tf.Variable(tf.constant(0.1, shape=[512]))
+    fc2_weights = tf.Variable(
+            tf.truncated_normal([512, NUM_LABELS],
+                                stddev=0.1,
+                                seed=SEED))
+    fc2_biases = tf.Variable(tf.constant(0.1, shape=[NUM_LABELS]))
+
+    #############################################################
+
+    evalits = models.evaluation(models.inference(eval_data,
+                              conv1_weights, conv1_biases,
+                              conv2_weights, conv2_biases,
+                              fc1_weights, fc1_biases,
+                              fc2_weights, fc2_biases,
+                              False))
+    with tf.Session() as sess:
+            predictions = sess.run(evalits, feed_dict={eval_data : eval_data})
 
 if __name__ == '__main__':
     tf.app.run()

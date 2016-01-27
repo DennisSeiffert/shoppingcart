@@ -84,13 +84,6 @@ def extract_labels(filename, num_images):
     # Convert to dense 1-hot representation.
     return (numpy.arange(NUM_LABELS) == labels[:, None]).astype(numpy.float32)
 
-def error_rate(predictions, labels):
-    """Return the error rate based on dense predictions and 1-hot labels."""
-    return 100.0 - (
-        100.0 *
-        numpy.sum(numpy.argmax(predictions, 1) == numpy.argmax(labels, 1)) /
-        predictions.shape[0])
-
 
 def main(argv=None):  # pylint: disable=unused-argument
     # Extract it into numpy arrays.
@@ -159,7 +152,7 @@ def main(argv=None):  # pylint: disable=unused-argument
                               conv2_weights, conv2_biases,
                               fc1_weights, fc1_biases,
                               fc2_weights, fc2_biases,
-                              True)
+                              False)
     loss = models.loss(logits, train_labels_node)
 
     optimizer = models.training(loss, BATCH_SIZE, train_size,
@@ -225,11 +218,11 @@ def main(argv=None):  # pylint: disable=unused-argument
                 print('Step %d (epoch %.2f), %.1f ms' %
                       (step, float(step) * BATCH_SIZE / train_size,
                        1000 * elapsed_time / EVAL_FREQUENCY))
-                print('Minibatch error: %.1f%%' % error_rate(predictions, batch_labels))
-                print('Validation error: %.1f%%' % error_rate(eval_in_batches(validation_data, sess), validation_labels))
+                print('Minibatch error: %.1f%%' % models.error_rate(predictions, batch_labels))
+                print('Validation error: %.1f%%' % models.error_rate(eval_in_batches(validation_data, sess), validation_labels))
                 sys.stdout.flush()
         # Finally print the result!
-        test_error = error_rate(eval_in_batches(test_data, sess), test_labels)
+        test_error = models.error_rate(eval_in_batches(test_data, sess), test_labels)
         print('Test error: %.1f%%' % test_error)
 
         if FLAGS.self_test:
