@@ -186,7 +186,7 @@ namespace CaffeTests
 
 			const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,.-#+ß;:_*~?=)(/&%$§\"!@€";
 			var letters = LETTERS.ToCharArray ().Select (l => l.ToString ()).ToArray ();
-			var instance = Wrapper.CreateClassifyingInstance (netDefinition, trainedNet, "C#", letters, 62);
+			var instance = Wrapper.CreateClassifyingInstance (netDefinition, trainedNet, "C#", letters, letters.Length);
 
 			instance.ShouldNotEqual (IntPtr.Zero);
 

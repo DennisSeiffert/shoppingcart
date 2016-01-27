@@ -129,7 +129,7 @@
 			// Show the output window only if unrecognized errors occur.
 			"showOutput": "always",
 			"args": [ "${file}" ],
-			"isTestCommand": true,
+			"isTestCommand": true,			
 			"problemMatcher": "$msCompile"		
 		}
 	]

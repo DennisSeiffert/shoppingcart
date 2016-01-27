@@ -19,7 +19,7 @@ namespace ShoppingCart
 	}
 	input: 'data'
 	input_shape { 
-	  dim: 10 
+	  dim: 1 
 	  dim: 1 
 	  dim: 32 
 	  dim: 32 
@@ -34,8 +34,7 @@ namespace ShoppingCart
 			  }  
 			  transform_param {  
 			    scale: 0.00392156862745  
-			    mirror: true  
-			    crop_size: 32  
+			    mirror: false 			      
 			  }  
 			  image_data_param {  
 			    source: '/home/dennis/PycharmProjects/untitled/images.txt'  
@@ -51,8 +50,8 @@ namespace ShoppingCart
 			  bottom: 'data' 
 			  top: 'conv1' 
 			  convolution_param {  
-			    num_output: 20  
-			    kernel_size: 5  
+			    num_output: 40  
+			    kernel_size: 3  
 			    weight_filler { 
 			      type: 'xavier' 
 			    } 
@@ -122,22 +121,12 @@ namespace ShoppingCart
 			      type: 'xavier' 
 			    } 
 			  } 
-			} 
+			} 	
 			layer { 
-			  name: 'loss' 
-			  type: 'SoftmaxWithLoss' 
-			  bottom: 'ip2' 
-			  bottom: 'label' 
-			  top: 'loss' 
-			  include {  
-			    phase: TRAIN  
-			  }  
-			}
-			layer { 
-			  name: 'prob' 
+			  name: 'prop' 
 			  type: 'Softmax' 
 			  bottom: 'ip2' 			  
-			  top: 'prob' 
+			  top: 'prop' 
 			  include {  
 			    phase: TEST  
 			  }  

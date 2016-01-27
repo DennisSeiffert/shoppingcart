@@ -22,7 +22,11 @@
 			"name": "Debug Tests",
 			"type": "mono",
 			"request": "launch",
-			"program": "CaffeTests/bin/Debug/CaffeTests.dll"			
+			"program": "packages/NUnit.3.1.0/bin/nunit3-console.exe",
+			"args": ["../../../ShoppingCartTests/ShoppingCartTests.csproj"]	,
+			"cwd": ".",
+			"runtimeExecutable": null,
+			"env": {}		
 		}
 	]
 }

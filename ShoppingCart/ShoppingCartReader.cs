@@ -76,6 +76,8 @@ namespace ShoppingCart
                          Bitmap blockImage;
                          new Accord.Imaging.Converters.MatrixToImage().Convert(characterImageToClassify, out blockImage);
                          //ImageBox.Show (blockImage);
+                         //blockImage.Save("image.jpg");
+                         
                                                										
                         if (characterImageToClassify.Length > 0)
                         {                            
