@@ -35,7 +35,7 @@ IMAGE_SIZE = 28
 NUM_CHANNELS = 1
 PIXEL_DEPTH = 255
 NUM_LABELS = 10
-
+SEED = 66478  # Set to None for random seed.
 
 
 def extract_data(filename):
@@ -49,7 +49,7 @@ def extract_data(filename):
     imagedata = list(img.getdata())
     data = numpy.asarray(imagedata, dtype=numpy.uint8).astype(numpy.float32)
     data = (data - (PIXEL_DEPTH / 2.0)) / PIXEL_DEPTH
-    data = data.reshape(1, IMAGE_SIZE, IMAGE_SIZE, 1)
+    data = data.reshape(1, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS)
 
     return data
 
@@ -62,10 +62,7 @@ def create_graph():
     _ = tf.import_graph_def(graph_def, name='')
 
 
-def main(argv=None):  # pylint: disable=unused-argument
-    # Extract it into numpy arrays.
-    image_data = extract_data("B_testImage.jpg")
-
+def evaluate(image_data):
     ######################################################
     eval_data = tf.placeholder(
             tf.float32,
@@ -107,7 +104,19 @@ def main(argv=None):  # pylint: disable=unused-argument
                               fc2_weights, fc2_biases,
                               False))
     with tf.Session() as sess:
-            predictions = sess.run(evalits, feed_dict={eval_data : eval_data})
+        saver = tf.train.Saver()
+        ckpt = tf.train.get_checkpoint_state('.')
+        if ckpt and ckpt.model_checkpoint_path:
+            saver.restore(sess, ckpt.model_checkpoint_path)
+            predictions = sess.run(evalits, feed_dict={eval_data : image_data})
+            return predictions
+        return []
+
+def main(argv=None):  # pylint: disable=unused-argument
+    # Extract it into numpy arrays.
+    # image_data = extract_data("CharacterRepository/data/B_testImage.jpg")
+    image_data = extract_data("CharacterRepository/data/test_Arial_Italic-4.jpg")
+    evaluate(image_data)
 
 if __name__ == '__main__':
     tf.app.run()

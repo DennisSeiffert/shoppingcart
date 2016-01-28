@@ -196,6 +196,7 @@ def main(argv=None):  # pylint: disable=unused-argument
         print('Initialized!')
 
         summaryWriter = tf.train.SummaryWriter("/tmp/tensorflow" , graph_def=sess.graph_def)
+        saver = tf.train.Saver();
         # Loop through training steps.
         for step in xrange(int(num_epochs * train_size) // BATCH_SIZE):
             # Compute the offset of the current minibatch in the data.
@@ -215,6 +216,7 @@ def main(argv=None):  # pylint: disable=unused-argument
                 elapsed_time = time.time() - start_time
                 start_time = time.time()
                 summaryWriter.add_summary(sess.run(summary_op, feed_dict = feed_dict), step)
+                saver.save(sess, 'model.ckpt', global_step=step+1)
                 print('Step %d (epoch %.2f), %.1f ms' %
                       (step, float(step) * BATCH_SIZE / train_size,
                        1000 * elapsed_time / EVAL_FREQUENCY))
