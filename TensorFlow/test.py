@@ -23,100 +23,80 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy
 import PIL
+import numpy
 from PIL import Image
-from tensorflow.python.platform import gfile
+from threading import Lock
 
 import tensorflow as tf
+
 import models
 
-IMAGE_SIZE = 28
-NUM_CHANNELS = 1
-PIXEL_DEPTH = 255
-NUM_LABELS = 10
-SEED = 66478  # Set to None for random seed.
-
-
-def extract_data(filename):
+def preprocess_image_data(im):
     """Extract the images into a 4D tensor [image index, y, x, channels].
     Values are rescaled from [0, 255] down to [-0.5, 0.5].
     """
-    print('Extracting', filename)
-
-    im = Image.open(filename)
-    img = im.resize((IMAGE_SIZE, IMAGE_SIZE), PIL.Image.ANTIALIAS)
+    img = im.resize((models.IMAGE_SIZE, models.IMAGE_SIZE), PIL.Image.ANTIALIAS)
+    if img.mode == 'RGB':
+        img = img.convert('1')
     imagedata = list(img.getdata())
     data = numpy.asarray(imagedata, dtype=numpy.uint8).astype(numpy.float32)
-    data = (data - (PIXEL_DEPTH / 2.0)) / PIXEL_DEPTH
-    data = data.reshape(1, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS)
+    data = 255.0 - data
+    for x in numpy.nditer(data, op_flags=['readwrite']):
+        if x[...] < 100.0:
+            x[...] = 0.0
+        else:
+            x[...] = 255.0
+    data = (data - (models.PIXEL_DEPTH / 2.0)) / models.PIXEL_DEPTH
+    data = data.reshape(1, models.IMAGE_SIZE, models.IMAGE_SIZE, models.NUM_CHANNELS)
 
     return data
 
-def create_graph():
-  """"Creates a graph from saved GraphDef file and returns a saver."""
-  # Creates graph from saved graph_def.pb.
-  with gfile.FastGFile('tensorflow.pb', 'rb') as f:
-    graph_def = tf.GraphDef()
-    graph_def.ParseFromString(f.read())
-    _ = tf.import_graph_def(graph_def, name='')
-
-
-def evaluate(image_data):
-    ######################################################
+def evaluate(image_data,
+              conv1_weights, conv1_biases,
+                                                 conv2_weights, conv2_biases,
+                                                 fc1_weights, fc1_biases,
+                                                 fc2_weights, fc2_biases):
     eval_data = tf.placeholder(
             tf.float32,
-            shape=(1, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
+            shape=(1, models.IMAGE_SIZE, models.IMAGE_SIZE, models.NUM_CHANNELS),
             name="test_data_input")
 
-    # The variables below hold all the trainable weights. They are passed an
-    # initial value which will be assigned when when we call:
-    # {tf.initialize_all_variables().run()}
-    conv1_weights = tf.Variable(
-            tf.truncated_normal([5, 5, NUM_CHANNELS, 32],  # 5x5 filter, depth 32.
-                                stddev=0.1,
-                                seed=SEED,
-                                name="conv1_weights"))
-    conv1_biases = tf.Variable(tf.zeros([32]), name="conv1_biases")
-    conv2_weights = tf.Variable(
-            tf.truncated_normal([5, 5, 32, 64],
-                                stddev=0.1,
-                                seed=SEED))
-    conv2_biases = tf.Variable(tf.constant(0.1, shape=[64]))
-    fc1_weights = tf.Variable(  # fully connected, depth 512.
-            tf.truncated_normal(
-                    [IMAGE_SIZE // 4 * IMAGE_SIZE // 4 * 64, 512],
-                    stddev=0.1,
-                    seed=SEED))
-    fc1_biases = tf.Variable(tf.constant(0.1, shape=[512]))
-    fc2_weights = tf.Variable(
-            tf.truncated_normal([512, NUM_LABELS],
-                                stddev=0.1,
-                                seed=SEED))
-    fc2_biases = tf.Variable(tf.constant(0.1, shape=[NUM_LABELS]))
-
-    #############################################################
-
     evalits = models.evaluation(models.inference(eval_data,
-                              conv1_weights, conv1_biases,
-                              conv2_weights, conv2_biases,
-                              fc1_weights, fc1_biases,
-                              fc2_weights, fc2_biases,
-                              False))
-    with tf.Session() as sess:
-        saver = tf.train.Saver()
-        ckpt = tf.train.get_checkpoint_state('.')
-        if ckpt and ckpt.model_checkpoint_path:
-            saver.restore(sess, ckpt.model_checkpoint_path)
-            predictions = sess.run(evalits, feed_dict={eval_data : image_data})
-            return predictions
-        return []
+                                                 conv1_weights, conv1_biases,
+                                                 conv2_weights, conv2_biases,
+                                                 fc1_weights, fc1_biases,
+                                                 fc2_weights, fc2_biases,
+                                                 False))
+
+
+    with models.tf.Session() as sess:
+        lock = Lock()
+        lock.acquire()
+        try:
+            saver = models.tf.train.Saver([ conv1_weights, conv1_biases,
+                                                 conv2_weights, conv2_biases,
+                                                 fc1_weights, fc1_biases,
+                                                 fc2_weights, fc2_biases])
+            ckpt = models.tf.train.get_checkpoint_state('checkpoints')
+            if ckpt and ckpt.model_checkpoint_path:
+                saver.restore(sess, ckpt.model_checkpoint_path)
+        finally:
+            lock.release() # release lock, no matter what
+        argmax = tf.arg_max(evalits,1)
+        return sess.run(argmax, feed_dict={eval_data : image_data})
+    return -1
 
 def main(argv=None):  # pylint: disable=unused-argument
-    # Extract it into numpy arrays.
-    # image_data = extract_data("CharacterRepository/data/B_testImage.jpg")
-    image_data = extract_data("CharacterRepository/data/test_Arial_Italic-4.jpg")
-    evaluate(image_data)
+    conv1_weights, conv1_biases, conv2_weights, conv2_biases, fc1_weights, fc1_biases, fc2_weights, fc2_biases, batch = models.createVariables()
+    for i in range(0, 10, 1):
+        image_data = preprocess_image_data(Image.open("CharacterRepository/data/test_Arial_Italic-"+str(i % 9)+".jpg"))
+        result = evaluate(image_data,
+                          conv1_weights, conv1_biases,
+                          conv2_weights, conv2_biases,
+                          fc1_weights, fc1_biases,
+                          fc2_weights, fc2_biases)
+        print(i % 9,result)
 
 if __name__ == '__main__':
     tf.app.run()

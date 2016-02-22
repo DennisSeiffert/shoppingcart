@@ -215,3 +215,10 @@ FakesAssemblies/
 **/*.Server/GeneratedArtifacts
 **/*.Server/ModelManifest.xml
 _Pvt_Extensions
+
+*.jpg
+*:*
+Fnt/
+HandWrittenDigitsModelData/
+checkpoints/
+data/
